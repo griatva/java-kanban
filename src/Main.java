@@ -35,19 +35,19 @@ public class Main {
         SubTask subtask3 = taskManager.createSubTask(new SubTask("Название подзадачи-3", "описание-3", Status.IN_PROGRESS, epic2));
         System.out.println("Создание подзадачи-3: " + subtask3);
 
-        System.out.println("печатаем напрямую из таблицы" + "\n"); //печатаем напрямую из таблицы
+        System.out.println("печатаем напрямую из таблицы" + "\n");
         System.out.println(taskManager.getTasks() + "\n");
         System.out.println(taskManager.getSubtasks() + "\n");
         System.out.println(taskManager.getEpics() + "\n");
 
-        System.out.println("печатаем через методы" + "\n"); //печатаем через методы
+        System.out.println("печатаем через методы" + "\n");
         System.out.println(taskManager.printSubTasksOneEpic(epic1) + "\n");
         System.out.println(taskManager.printTasksList() + "\n");
         System.out.println(taskManager.printSubTasksList() + "\n");
         System.out.println(taskManager.printEpicList() + "\n");
 
 
-        System.out.println("меняем статусы задач" + "\n"); //меняем статусы задач
+        System.out.println("меняем статусы задач" + "\n");
         task1.setStatus(Status.IN_PROGRESS);
         System.out.println(task1 + "\n");
         taskManager.updateTask(task1);
@@ -58,11 +58,11 @@ public class Main {
         taskManager.updateTask(task2);
         System.out.println(taskManager.printTasksList() + "\n");
 
-        System.out.println("меняем статусы подзадач, обновляем статус эпика" + "\n"); //меняем статусы подзадач
+        System.out.println("меняем статусы подзадач, обновляем статус эпика" + "\n");
         subtask1.setStatus(Status.DONE);
         subtask2.setStatus(Status.DONE);
         subtask3.setStatus(Status.NEW);
-        taskManager.updateSubTask(subtask1);// без этого метода эпик не обновляется
+        taskManager.updateSubTask(subtask1);
         taskManager.updateSubTask(subtask2);
         taskManager.updateSubTask(subtask3);
         System.out.println(taskManager.printSubTasksList() + "\n");
