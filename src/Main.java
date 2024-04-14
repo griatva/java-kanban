@@ -25,38 +25,34 @@ public class Main {
         System.out.println("Создание эпика-2:" + epic2);
 
 
-        SubTask subtask1 = taskManager.createSubTask(new SubTask("Название подзадачи-1", "описание-1", Status.NEW, epic1));
+        SubTask subtask1 = taskManager.createSubTask(new SubTask("Название подзадачи-1", "описание-1", Status.NEW, epic1.getId()));
         System.out.println("Создание подзадачи-1: " + subtask1);
 
 
-        SubTask subtask2 = taskManager.createSubTask(new SubTask("Название подзадачи-2", "описание-2", Status.IN_PROGRESS, epic1));
+        SubTask subtask2 = taskManager.createSubTask(new SubTask("Название подзадачи-2", "описание-2", Status.IN_PROGRESS, epic1.getId()));
         System.out.println("Создание подзадачи-2: " + subtask2);
 
-        SubTask subtask3 = taskManager.createSubTask(new SubTask("Название подзадачи-3", "описание-3", Status.IN_PROGRESS, epic2));
+        SubTask subtask3 = taskManager.createSubTask(new SubTask("Название подзадачи-3", "описание-3", Status.IN_PROGRESS, epic2.getId()));
         System.out.println("Создание подзадачи-3: " + subtask3);
 
-        System.out.println("печатаем напрямую из таблицы" + "\n");
-        System.out.println(taskManager.getTasks() + "\n");
-        System.out.println(taskManager.getSubtasks() + "\n");
-        System.out.println(taskManager.getEpics() + "\n");
 
         System.out.println("печатаем через методы" + "\n");
-        System.out.println(taskManager.printSubTasksOneEpic(epic1) + "\n");
-        System.out.println(taskManager.printTasksList() + "\n");
-        System.out.println(taskManager.printSubTasksList() + "\n");
-        System.out.println(taskManager.printEpicList() + "\n");
+        System.out.println(taskManager.getSubTasksByEpic(epic1) + "\n");
+        System.out.println(taskManager.getTasksList() + "\n");
+        System.out.println(taskManager.getSubTasksList() + "\n");
+        System.out.println(taskManager.getEpicList() + "\n");
 
 
         System.out.println("меняем статусы задач" + "\n");
         task1.setStatus(Status.IN_PROGRESS);
         System.out.println(task1 + "\n");
         taskManager.updateTask(task1);
-        System.out.println(taskManager.printTasksList() + "\n");
+        System.out.println(taskManager.getTasksList() + "\n");
 
         task2.setStatus(Status.NEW);
         System.out.println(task2 + "\n");
         taskManager.updateTask(task2);
-        System.out.println(taskManager.printTasksList() + "\n");
+        System.out.println(taskManager.getTasksList() + "\n");
 
         System.out.println("меняем статусы подзадач, обновляем статус эпика" + "\n");
         subtask1.setStatus(Status.DONE);
@@ -65,22 +61,23 @@ public class Main {
         taskManager.updateSubTask(subtask1);
         taskManager.updateSubTask(subtask2);
         taskManager.updateSubTask(subtask3);
-        System.out.println(taskManager.printSubTasksList() + "\n");
-        System.out.println(taskManager.printEpicList() + "\n");
+        System.out.println(taskManager.getSubTasksList() + "\n");
+        System.out.println(taskManager.getEpicList() + "\n");
 
         System.out.println("удаляем одну задачу" + "\n");
         taskManager.deleteTaskById(1);
-        System.out.println(taskManager.printTasksList() + "\n");
+        System.out.println(taskManager.getTasksList() + "\n");
 
         System.out.println("удаляем одну подзадачу" + "\n");
         taskManager.deleteSubTaskById(5);
-        System.out.println(taskManager.printSubTasksList() + "\n");
-        System.out.println(taskManager.printEpicList() + "\n");
+        System.out.println(taskManager.getSubTasksList() + "\n");
+        System.out.println(taskManager.getEpicList() + "\n");
 
         System.out.println("удаляем один эпик" + "\n");
         taskManager.deleteEpicById(3);
-        System.out.println(taskManager.printSubTasksList() + "\n");
-        System.out.println(taskManager.printEpicList() + "\n");
+        System.out.println(taskManager.getSubTasksList() + "\n");
+        System.out.println(taskManager.getEpicList() + "\n");
+
 
     }
 }

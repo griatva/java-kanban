@@ -1,6 +1,6 @@
 package model;
 
-import service.TaskManager;
+
 
 import java.util.Objects;
 
@@ -9,7 +9,7 @@ public class Task {
     private String name;
     private String description;
     private Status status;
-    private int id;
+    private Integer id;
 
     public Task(String name, String description, Status status) {
         this.name = name;
@@ -22,11 +22,11 @@ public class Task {
         this.description = description;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -35,12 +35,18 @@ public class Task {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        return (id == task.id);
+        return (Objects.equals(id,task.id));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        int hash = 17;
+        if (id != null) {
+            hash += id.hashCode();
+        }
+        hash = hash * 31;
+
+        return hash;
     }
 
 
