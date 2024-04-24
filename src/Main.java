@@ -2,13 +2,17 @@ import model.Epic;
 import model.Status;
 import model.SubTask;
 import model.Task;
+import service.Managers;
 import service.TaskManager;
+
 
 public class Main {
 
     public static void main(String[] args) {
 
-        TaskManager taskManager = new TaskManager();
+
+
+        TaskManager taskManager = Managers.getDefaults();
 
         Task task1 = taskManager.createTask(new Task("название задачи-1", "описание-1", Status.NEW));
         System.out.println("Создание задачи-1:" + task1);
@@ -34,6 +38,9 @@ public class Main {
 
         SubTask subtask3 = taskManager.createSubTask(new SubTask("Название подзадачи-3", "описание-3", Status.IN_PROGRESS, epic2.getId()));
         System.out.println("Создание подзадачи-3: " + subtask3);
+
+
+        printAllTasks(taskManager);
 
 
         System.out.println("печатаем через методы" + "\n");
@@ -74,10 +81,56 @@ public class Main {
         System.out.println(taskManager.getEpicList() + "\n");
 
         System.out.println("удаляем один эпик" + "\n");
-        taskManager.deleteEpicById(3);
-        System.out.println(taskManager.getSubTasksList() + "\n");
         System.out.println(taskManager.getEpicList() + "\n");
+        System.out.println(taskManager.getSubTasksList() + "\n");
+        taskManager.deleteEpicById(3);
+        System.out.println(taskManager.getEpicList() + "\n");
+        System.out.println(taskManager.getSubTasksList() + "\n");
 
 
     }
+
+    private static void printAllTasks(TaskManager manager) {
+        System.out.println("Задачи:");
+        for (Task task : manager.getTasksList()) {
+            System.out.println(task);
+        }
+        System.out.println("Эпики:");
+        for (Epic epic : manager.getEpicList()) {
+            System.out.println(epic);
+
+            for (Task task : manager.getSubTasksByEpic(epic)) {
+                System.out.println("--> " + task);
+            }
+        }
+        System.out.println("Подзадачи:");
+        for (Task subtask : manager.getSubTasksList()) {
+            System.out.println(subtask);
+        }
+
+        manager.getTaskById(1);
+        manager.getTaskById(2);
+        manager.getEpicById(3);
+        manager.getEpicById(4);
+        manager.getSubTaskById(5);
+        manager.getSubTaskById(6);
+        manager.getSubTaskById(7);
+
+        System.out.println("История:");
+        for (Task task : manager.getHistory()) {
+            System.out.println(task);
+        }
+
+        manager.getTaskById(1);
+        manager.getTaskById(2);
+        manager.getEpicById(3);
+        manager.getEpicById(4);
+
+        System.out.println("История после добавления 11-го пункта:");
+        for (Task task : manager.getHistory()) {
+            System.out.println(task);
+        }
+
+    }
+
 }
