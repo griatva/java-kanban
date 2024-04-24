@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface TaskManager {
 
-
     Task getTaskById(Integer id);
 
     SubTask getSubTaskById(Integer id);
