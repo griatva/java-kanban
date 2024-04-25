@@ -2,8 +2,6 @@ package model;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import service.Managers;
-import service.TaskManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,28 +10,18 @@ class EpicTest {
 
     @Test
     @DisplayName("Два эпика с одинаковым ID должны быть равны")
-    void shouldBeEqualToCopy() {
+    void equals_returnTrue_objectHaveSameId() {
 
-        TaskManager manager = Managers.getDefaults();
-        Epic epicExpected = new Epic("Имя", "Описание");
+        //given
+        Epic epicExpected = new Epic("Имя-1", "Описание-1");
         epicExpected.setStatus(Status.NEW);
         epicExpected.setId(1);
 
-        Epic epic = new Epic("Имя", "Описание");
-        manager.createEpic(epic);
-        Epic epicSaved = manager.getEpicById(epic.getId());
+        Epic epicActual = new Epic("Имя-2", "Описание-2");
+        epicActual.setStatus(Status.DONE);
+        epicActual.setId(1);
 
-        assertEqualsTask(epicExpected, epicSaved, "Эпики не равны");
-
-        Epic epic1 = manager.getEpicById(1);
-        Epic epic2 = manager.getEpicById(1);
-        assertEqualsTask(epic1, epic2, "Эпики не равны");
-    }
-
-    private static void assertEqualsTask(Task expected, Task actual, String massage) {
-        assertEquals(expected.getId(), actual.getId(), massage + ", id");
-        assertEquals(expected.getName(), actual.getName(), massage + ", name");
-        assertEquals(expected.getDescription(), actual.getDescription(), massage + ", description");
-        assertEquals(expected.getStatus(), actual.getStatus(), massage + ", status");
+        //that,than
+        assertEquals(epicExpected, epicActual, "Эпики не равны");
     }
 }

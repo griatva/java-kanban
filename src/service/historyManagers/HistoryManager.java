@@ -1,4 +1,4 @@
-package service;
+package service.historyManagers;
 
 import model.Task;
 

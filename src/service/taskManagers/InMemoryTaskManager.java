@@ -1,9 +1,10 @@
-package service;
+package service.taskManagers;
 
 import model.Epic;
 import model.Status;
 import model.SubTask;
 import model.Task;
+import service.historyManagers.HistoryManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +24,6 @@ public class InMemoryTaskManager implements TaskManager {
         this.epics = new HashMap<>();
         this.historyManager = historyManager;
     }
-
 
     @Override
     public List<Task> getHistory() {
@@ -174,7 +174,7 @@ public class InMemoryTaskManager implements TaskManager {
         subTasks.clear();
     }
 
-    public boolean isEpicNEW(Epic epic) {
+    private boolean isEpicNEW(Epic epic) {
         int counter = 0;
         List<Integer> subTasksIdInEpic = epic.getSubTasksId();
 
@@ -186,7 +186,7 @@ public class InMemoryTaskManager implements TaskManager {
         return counter == subTasksIdInEpic.size();
     }
 
-    public boolean isEpicDONE(Epic epic) {
+    private boolean isEpicDONE(Epic epic) {
         int counter = 0;
         List<Integer> subTasksIdInEpic = epic.getSubTasksId();
         if (subTasksIdInEpic.isEmpty()) {
@@ -201,7 +201,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-
     private void calculateEpicStatus(Epic epic) {
 
         if (epic.getSubTasksId().isEmpty() || isEpicNEW(epic)) {
@@ -212,6 +211,4 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStatus(Status.IN_PROGRESS);
         }
     }
-
-
 }

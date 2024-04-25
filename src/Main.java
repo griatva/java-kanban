@@ -3,7 +3,7 @@ import model.Status;
 import model.SubTask;
 import model.Task;
 import service.Managers;
-import service.TaskManager;
+import service.taskManagers.TaskManager;
 
 
 public class Main {
