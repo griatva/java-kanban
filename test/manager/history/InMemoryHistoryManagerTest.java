@@ -27,14 +27,12 @@ class InMemoryHistoryManagerTest {
         epic.setId(2);
         SubTask subtask = new SubTask("name", "description", Status.NEW, epic.getId());
         subtask.setId(3);
-
-        //when
         inMemoryHistoryManager.addTaskInHistory(task);
         inMemoryHistoryManager.addTaskInHistory(epic);
         inMemoryHistoryManager.addTaskInHistory(subtask);
 
+        //when
         inMemoryHistoryManager.addTaskInHistory(task);
-
         List<Task> history = inMemoryHistoryManager.getHistory();
 
         //then
