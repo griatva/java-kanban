@@ -3,7 +3,7 @@ package model;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Эпик")
 class EpicTest {
@@ -21,7 +21,7 @@ class EpicTest {
         epicActual.setStatus(Status.DONE);
         epicActual.setId(1);
 
-        //that,than
+        //when,then
         assertEquals(epicExpected, epicActual, "Эпики не равны");
     }
 }

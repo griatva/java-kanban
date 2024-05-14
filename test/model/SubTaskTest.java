@@ -3,7 +3,7 @@ package model;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Подзадача")
 class SubTaskTest {
@@ -20,7 +20,7 @@ class SubTaskTest {
         SubTask subTaskActual = new SubTask("Имя-2", "Описание-2", Status.DONE, 3);
         subTaskActual.setId(1);
 
-        //that,than
+        //when,then
         assertEquals(subTaskExpected, subTaskActual, "Задачи не равны");
     }
 }
