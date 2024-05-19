@@ -1,4 +1,4 @@
-package service.historyManagers;
+package manager.history;
 
 import model.Task;
 
@@ -9,4 +9,7 @@ public interface HistoryManager {
     List<Task> getHistory();
 
     void addTaskInHistory(Task task);
+
+    void remove(int id);
+
 }

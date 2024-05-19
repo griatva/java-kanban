@@ -1,10 +1,10 @@
-package service;
+package manager;
 
+import manager.task.TaskManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import service.taskManagers.TaskManager;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("Менеджеры")
 class ManagersTest {
