@@ -1,9 +1,12 @@
 import manager.Managers;
+import manager.task.FileBackedTaskManager;
 import manager.task.TaskManager;
 import model.Epic;
 import model.Status;
 import model.SubTask;
 import model.Task;
+
+import java.io.File;
 
 
 public class Main {
@@ -39,12 +42,31 @@ public class Main {
         System.out.println("Создание подзадачи-3: " + subtask3);
 
 
-        boolean option = true;
+        boolean option = false;
 
         if (option) {
             printAllTasks(taskManager);
         } else {
+            manipulations(taskManager, epic1, task1, task2, subtask1, subtask2, subtask3);
+        }
 
+        File fileTest = new File("resources/", "task.csv");
+        FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(fileTest);
+        System.out.println(manager.equals(taskManager));
+        System.out.println(manager.getTasksList());
+        System.out.println(manager.getEpicList());
+        System.out.println(manager.getSubTasksList());
+        System.out.println(manager.getCounterId());
+    }
+
+
+    private static void manipulations(TaskManager taskManager,
+                                      Epic epic1,
+                                      Task task1,
+                                      Task task2,
+                                      SubTask subtask1,
+                                      SubTask subtask2,
+                                      SubTask subtask3) {
             System.out.println("печатаем через методы" + "\n");
             System.out.println(taskManager.getSubTasksByEpic(epic1) + "\n");
             System.out.println(taskManager.getTasksList() + "\n");
@@ -88,8 +110,9 @@ public class Main {
             taskManager.deleteEpicById(3);
             System.out.println(taskManager.getEpicList() + "\n");
             System.out.println(taskManager.getSubTasksList() + "\n");
+
         }
-    }
+
 
     private static void printAllTasks(TaskManager manager) {
         System.out.println("Задачи:");
@@ -134,7 +157,7 @@ public class Main {
 
         manager.deleteTaskById(1);
         manager.deleteEpicById(3);
-
+        manager.deleteSubTaskById(5);
 
         System.out.println("История после удаления task-1, subtask-1, epic-1");
         for (Task task : manager.getHistory()) {

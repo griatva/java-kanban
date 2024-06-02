@@ -10,6 +10,16 @@ public class Task {
     private String description;
     private Status status;
     private Integer id;
+    private Integer epicId;
+
+    //id,type,name,status,description,epicId
+    public Task(Integer id, String name, Status status, String description, Integer epicId) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.id = id;
+        this.epicId = epicId;
+    }
 
     public Task(String name, String description, Status status) {
         this.name = name;
@@ -20,6 +30,14 @@ public class Task {
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public TaskType getType() {
+        return TaskType.TASK;
+    }
+
+    public Integer getEpicId() {
+        return null;
     }
 
     public Integer getId() {
@@ -82,6 +100,7 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", id=" + id +
+                ", epicId=" + epicId +
                 '}';
     }
 }
