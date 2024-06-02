@@ -44,8 +44,6 @@ public class InMemoryTaskManager implements TaskManager {
         Task task = tasks.get(id);
         if (task != null) {
             historyManager.addTaskInHistory(task);
-        } else {
-            throw new NotFoundException("Не найдена задача, id: " + id);
         }
         return task;
     }
@@ -55,8 +53,6 @@ public class InMemoryTaskManager implements TaskManager {
         SubTask subTask = subTasks.get(id);
         if (subTask != null) {
             historyManager.addTaskInHistory(subTask);
-        } else {
-            throw new NotFoundException("Не найдена подзадача, id: " + id);
         }
         return subTask;
     }
@@ -66,8 +62,6 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epics.get(id);
         if (epic != null) {
             historyManager.addTaskInHistory(epic);
-        } else {
-            throw new NotFoundException("Не найден эпик, id: " + id);
         }
         return epic;
     }
