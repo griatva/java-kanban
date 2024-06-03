@@ -1,9 +1,12 @@
 package manager.task;
 
+import converter.TaskConverter;
 import exception.ManagerSaveException;
 import manager.Managers;
 import manager.history.HistoryManager;
-import model.*;
+import model.Epic;
+import model.SubTask;
+import model.Task;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -32,25 +35,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             bw.newLine();
 
             for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
-                bw.write(toString(entry.getValue()));
+                bw.write(TaskConverter.toString(entry.getValue()));
                 bw.newLine();
             }
             for (Map.Entry<Integer, Epic> entry : epics.entrySet()) {
-                bw.write(toString(entry.getValue()));
+                bw.write(TaskConverter.toString(entry.getValue()));
                 bw.newLine();
             }
             for (Map.Entry<Integer, SubTask> entry : subTasks.entrySet()) {
-                bw.write(toString(entry.getValue()));
+                bw.write(TaskConverter.toString(entry.getValue()));
                 bw.newLine();
             }
         } catch (IOException exp) {
             throw new ManagerSaveException("Ошибка записи в файл: " + file.getName(), exp);
         }
-    }
-
-    private String toString(Task task) {
-        return task.getId() + "," + task.getType() + "," + task.getName() + "," + task.getStatus() + "," +
-                task.getDescription() + "," + task.getEpicId();
     }
 
     public static FileBackedTaskManager loadFromFile(File file) {
@@ -70,7 +68,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 if (line == null)
                     break;
 
-                Task task = fromString(line);
+                Task task = TaskConverter.fromString(line);
                 int id = task.getId();
                 switch (task.getType()) {
                     case TASK:
@@ -83,10 +81,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     case SUBTASK:
                         SubTask subTask = (SubTask) task;
                         manager.subTasks.put(id, subTask);
-                        Epic tiedEpic = manager.epics.get(subTask.getEpicId());
-                        tiedEpic.getSubTasksId().add(subTask.getId());
+
                         break;
                 }
+                for (SubTask subTask : manager.subTasks.values()) {
+                    Epic tiedEpic = manager.epics.get(subTask.getEpicId());
+                    tiedEpic.getSubTasksId().add(subTask.getId());
+                }
+
                 if (maxId < id) {
                     maxId = id;
                 }
@@ -96,35 +98,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         manager.counterId = maxId;
         return manager;
-    }
-
-    private static Task fromString(String line) {
-
-        Task task = null;
-
-        String[] fields = line.split(",");
-
-        int id = Integer.parseInt(fields[0]);
-        TaskType type = TaskType.valueOf(fields[1]);
-        String name = fields[2];
-        Status status = Status.valueOf(fields[3]);
-        String description = fields[4];
-
-        switch (type) {
-            case TASK:
-                task = new Task(id, name, status, description, null);
-                break;
-
-            case EPIC:
-                task = new Epic(id, name, status, description, null);
-                break;
-
-            case SUBTASK:
-                Integer epicId = Integer.parseInt(fields[5]);
-                task = new SubTask(id, name, status, description, epicId);
-                break;
-        }
-        return task;
     }
 
     @Override

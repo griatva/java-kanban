@@ -10,15 +10,12 @@ public class Task {
     private String description;
     private Status status;
     private Integer id;
-    private Integer epicId;
 
-    //id,type,name,status,description,epicId
-    public Task(Integer id, String name, Status status, String description, Integer epicId) {
+    public Task(Integer id, String name, Status status, String description) {
         this.name = name;
         this.description = description;
         this.status = status;
         this.id = id;
-        this.epicId = epicId;
     }
 
     public Task(String name, String description, Status status) {
@@ -100,7 +97,6 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", id=" + id +
-                ", epicId=" + epicId +
                 '}';
     }
 }

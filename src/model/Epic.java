@@ -10,8 +10,8 @@ public class Epic extends Task {
         super(name, description);
     }
 
-    public Epic(Integer id, String name, Status status, String description, Integer epicId) {
-        super(id, name, status, description, epicId);
+    public Epic(Integer id, String name, Status status, String description) {
+        super(id, name, status, description);
     }
 
     public List<Integer> getSubTasksId() {
