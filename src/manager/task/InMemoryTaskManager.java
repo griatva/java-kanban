@@ -26,10 +26,6 @@ public class InMemoryTaskManager implements TaskManager {
         this.historyManager = historyManager;
     }
 
-    public int getCounterId() {
-        return counterId;
-    }
-
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();

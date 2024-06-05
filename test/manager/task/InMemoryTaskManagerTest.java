@@ -1,6 +1,6 @@
 package manager.task;
 
-import manager.Managers;
+
 import model.Epic;
 import model.Status;
 import model.SubTask;
@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,14 @@ class InMemoryTaskManagerTest {
 
     @BeforeEach
     void init() {
-        manager = Managers.getDefaults();
+        File directoryForTempFile = new File("C:\\Users\\LIUBOV\\IdeaProjects\\java-kanban\\test\\testFiles");
+        File tempFile;
+        try {
+            tempFile = File.createTempFile("test-", ".csv", directoryForTempFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        manager = FileBackedTaskManager.loadFromFile(tempFile);
     }
 
     @Test

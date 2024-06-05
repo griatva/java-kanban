@@ -1,4 +1,3 @@
-import manager.Managers;
 import manager.task.FileBackedTaskManager;
 import manager.task.TaskManager;
 import model.Epic;
@@ -7,14 +6,24 @@ import model.SubTask;
 import model.Task;
 
 import java.io.File;
+import java.io.IOException;
 
 
 public class Main {
 
     public static void main(String[] args) {
 
+        File directoryForTempFile = new File("C:\\Users\\LIUBOV\\IdeaProjects\\java-kanban\\test\\testFiles");
+        File tempFile;
 
-        TaskManager taskManager = Managers.getDefaults();
+        try {
+            tempFile = File.createTempFile("test-", ".csv", directoryForTempFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        TaskManager taskManager = FileBackedTaskManager.loadFromFile(tempFile);
+
+
 
         Task task1 = taskManager.createTask(new Task("название задачи-1", "описание-1", Status.NEW));
         System.out.println("Создание задачи-1:" + task1);
@@ -50,13 +59,13 @@ public class Main {
             manipulations(taskManager, epic1, task1, task2, subtask1, subtask2, subtask3);
         }
 
-        File fileTest = new File("resources/", "task.csv");
-        FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(fileTest);
-        System.out.println(manager.equals(taskManager));
+
+        FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(tempFile);
+
         System.out.println(manager.getTasksList());
         System.out.println(manager.getEpicList());
         System.out.println(manager.getSubTasksList());
-        System.out.println(manager.getCounterId());
+
     }
 
 

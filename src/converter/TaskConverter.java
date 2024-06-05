@@ -6,8 +6,15 @@ public class TaskConverter {
 
     public static String toString(Task task) {
         return task.getId() + "," + task.getType() + "," + task.getName() + "," + task.getStatus() + "," +
-                task.getDescription() + "," + task.getEpicId();
+                task.getDescription() + "," + null;
     }
+
+    public static String toString(SubTask subTask) {
+
+        return subTask.getId() + "," + subTask.getType() + "," + subTask.getName() + "," +
+                subTask.getStatus() + "," + subTask.getDescription() + "," + subTask.getEpicId();
+    }
+
 
     public static Task fromString(String line) {
 

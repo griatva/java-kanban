@@ -16,12 +16,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
 
-    public FileBackedTaskManager(HistoryManager historyManager) {
-        super(historyManager);
-        this.file = new File("resources/", "task.csv");
-    }
-
-    public FileBackedTaskManager(HistoryManager historyManager, File file) {
+    private FileBackedTaskManager(HistoryManager historyManager, File file) {
         super(historyManager);
         this.file = file;
     }
@@ -60,7 +55,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try (FileReader reader = new FileReader(file, StandardCharsets.UTF_8);
              BufferedReader br = new BufferedReader(reader)) {
 
-            br.readLine();
+            String firstLine = br.readLine();
+            if (firstLine == null) return manager;
 
             while (true) {
                 String line = br.readLine();
@@ -84,14 +80,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
                         break;
                 }
-                for (SubTask subTask : manager.subTasks.values()) {
-                    Epic tiedEpic = manager.epics.get(subTask.getEpicId());
-                    tiedEpic.getSubTasksId().add(subTask.getId());
-                }
-
                 if (maxId < id) {
                     maxId = id;
                 }
+            }
+            for (SubTask subTask : manager.subTasks.values()) {
+                Epic tiedEpic = manager.epics.get(subTask.getEpicId());
+                tiedEpic.getSubTasksId().add(subTask.getId());
             }
         } catch (IOException exp) {
             throw new RuntimeException("Ошибка чтения файла: " + file.getName(), exp);

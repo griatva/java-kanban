@@ -1,6 +1,6 @@
 package manager.task;
 
-import manager.Managers;
+
 import model.Epic;
 import model.Status;
 import model.SubTask;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,10 +20,17 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class FileBackedTaskManagerTest {
 
     private TaskManager manager;
+    File tempFile;
 
     @BeforeEach
     void init() {
-        manager = Managers.getDefaults();
+        File directoryForTempFile = new File("C:\\Users\\LIUBOV\\IdeaProjects\\java-kanban\\test\\testFiles");
+        try {
+            tempFile = File.createTempFile("test-", ".csv", directoryForTempFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        manager = FileBackedTaskManager.loadFromFile(tempFile);
     }
 
     @Test
@@ -38,8 +46,7 @@ class FileBackedTaskManagerTest {
         FileBackedTaskManager managerExpected = (FileBackedTaskManager) manager;
 
         //when
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
 
         List<Task> taskListExpected = managerExpected.getTasksList();
         List<Epic> epicListExpected = managerExpected.getEpicList();
@@ -48,6 +55,8 @@ class FileBackedTaskManagerTest {
         List<Task> taskListActual = managerActual.getTasksList();
         List<Epic> epicListActual = managerActual.getEpicList();
         List<SubTask> subTaskListActual = managerActual.getSubTasksList();
+
+        Task task4 = managerActual.createTask(new Task("name2", "description4", Status.DONE));
 
         //then
         assertEquals(taskListExpected.size(), taskListActual.size(), "списки разного размера");
@@ -60,7 +69,6 @@ class FileBackedTaskManagerTest {
             assertEquals(taskExpected.getDescription(), taskActual.getDescription(),
                     "не совпадают description");
             assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
-            assertEquals(taskExpected.getEpicId(), taskActual.getEpicId(), "не совпадают epicId");
             assertEquals(taskExpected.getType(), taskActual.getType(), "не совпадают type");
         }
 
@@ -74,7 +82,6 @@ class FileBackedTaskManagerTest {
             assertEquals(epicExpected.getDescription(), epicActual.getDescription(),
                     "не совпадают description");
             assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "не совпадают status");
-            assertEquals(epicExpected.getEpicId(), epicActual.getEpicId(), "не совпадают epicId");
             assertEquals(epicExpected.getType(), epicActual.getType(), "не совпадают type");
 
             List<Integer> subTasksIdExpected = epicExpected.getSubTasksId();
@@ -99,7 +106,7 @@ class FileBackedTaskManagerTest {
             assertEquals(subTaskExpected.getType(), subTaskActual.getType(), "не совпадают type");
         }
 
-        assertEquals(managerExpected.getCounterId(), managerActual.getCounterId(), "Счетчик не восстановился");
+        assertEquals(4, task4.getId(), "Счетчик не восстановился");
 
     }
 
@@ -110,8 +117,7 @@ class FileBackedTaskManagerTest {
         //when
         Task taskExpected = manager.createTask(new Task("name1", "description1", Status.DONE));
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
         List<Task> list = managerActual.getTasksList();
         Task taskActual = list.getFirst();
 
@@ -120,7 +126,6 @@ class FileBackedTaskManagerTest {
         assertEquals(taskExpected.getName(), taskActual.getName(), "не совпадает name");
         assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "не совпадают description");
         assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
-        assertEquals(taskExpected.getEpicId(), taskActual.getEpicId(), "не совпадают epicId");
         assertEquals(taskExpected.getType(), taskActual.getType(), "не совпадают type");
 
     }
@@ -133,8 +138,7 @@ class FileBackedTaskManagerTest {
         SubTask subTaskExpected = manager.createSubTask(new SubTask("name", "description", Status.NEW,
                 epic.getId()));
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
         List<SubTask> list = managerActual.getSubTasksList();
         SubTask subTaskActual = list.getFirst();
 
@@ -156,8 +160,7 @@ class FileBackedTaskManagerTest {
         Epic epicExpected = manager.createEpic(new Epic("name", "description"));
 
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
         List<Epic> list = managerActual.getEpicList();
         Epic epicActual = list.getFirst();
 
@@ -167,7 +170,6 @@ class FileBackedTaskManagerTest {
         assertEquals(epicExpected.getDescription(), epicActual.getDescription(),
                 "не совпадают description");
         assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "не совпадают status");
-        assertEquals(epicExpected.getEpicId(), epicActual.getEpicId(), "не совпадают epicId");
         assertEquals(epicExpected.getType(), epicActual.getType(), "не совпадают type");
 
         List<Integer> subTasksIdExpected = epicExpected.getSubTasksId();
@@ -188,8 +190,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.updateTask(taskExpected);
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
         Task taskActual = managerActual.getTaskById(1);
 
         //then
@@ -197,7 +198,6 @@ class FileBackedTaskManagerTest {
         assertEquals(taskExpected.getName(), taskActual.getName(), "не совпадает name");
         assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "не совпадают description");
         assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
-        assertEquals(taskExpected.getEpicId(), taskActual.getEpicId(), "не совпадают epicId");
         assertEquals(taskExpected.getType(), taskActual.getType(), "не совпадают type");
 
     }
@@ -215,8 +215,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.updateSubTask(subTaskExpected);
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
         SubTask subTaskActual = managerActual.getSubTaskById(2);
 
         //then
@@ -241,8 +240,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.updateEpic(epicExpected);
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
         Epic epicActual = managerActual.getEpicById(1);
 
         //then
@@ -251,7 +249,6 @@ class FileBackedTaskManagerTest {
         assertEquals(epicExpected.getDescription(), epicActual.getDescription(),
                 "не совпадают description");
         assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "не совпадают status");
-        assertEquals(epicExpected.getEpicId(), epicActual.getEpicId(), "не совпадают epicId");
         assertEquals(epicExpected.getType(), epicActual.getType(), "не совпадают type");
 
         List<Integer> subTasksIdExpected = epicExpected.getSubTasksId();
@@ -270,8 +267,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.deleteTaskById(task.getId());
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
 
         //then
         assertNull(managerActual.getTaskById(task.getId()), "задача не удалилась");
@@ -288,8 +284,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.deleteSubTaskById(subtask.getId());
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
 
         //then
         assertNull(managerActual.getSubTaskById(subtask.getId()), "подзадача не удалилась");
@@ -305,8 +300,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.deleteEpicById(epic.getId());
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
 
         //then
         assertNull(managerActual.getEpicById(epic.getId()), "эпик не удалился");
@@ -323,8 +317,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.deleteAllTasks();
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
         List<Task> taskList = managerActual.getTasksList();
 
         //then
@@ -345,8 +338,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.deleteAllSubTasks();
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
         List<SubTask> subTaskList = managerActual.getSubTasksList();
 
         //then
@@ -366,8 +358,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.deleteAllEpics();
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(new File("resources/",
-                "task.csv"));
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
         List<Epic> epicList = managerActual.getEpicList();
 
         //then
