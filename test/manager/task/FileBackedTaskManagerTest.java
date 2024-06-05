@@ -24,7 +24,7 @@ class FileBackedTaskManagerTest {
 
     @BeforeEach
     void init() {
-        File directoryForTempFile = new File("test\\testFiles");
+        File directoryForTempFile = new File("test/testFiles");
         try {
             tempFile = File.createTempFile("test-", ".csv", directoryForTempFile);
         } catch (IOException e) {
