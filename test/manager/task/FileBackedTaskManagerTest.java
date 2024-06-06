@@ -1,6 +1,6 @@
 package manager.task;
 
-
+import manager.Managers;
 import model.Epic;
 import model.Status;
 import model.SubTask;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,17 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class FileBackedTaskManagerTest {
 
     private TaskManager manager;
-    File tempFile;
+    File fileForRecovery = new File("resources/task.csv");
 
     @BeforeEach
     void init() {
-        File directoryForTempFile = new File("test/testFiles");
-        try {
-            tempFile = File.createTempFile("test-", ".csv", directoryForTempFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        manager = FileBackedTaskManager.loadFromFile(tempFile);
+        manager = Managers.getDefaults();
+        manager.deleteAllEpics();
+        manager.deleteAllTasks();
+        manager.deleteAllSubTasks();
     }
 
     @Test
@@ -46,7 +42,7 @@ class FileBackedTaskManagerTest {
         FileBackedTaskManager managerExpected = (FileBackedTaskManager) manager;
 
         //when
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
 
         List<Task> taskListExpected = managerExpected.getTasksList();
         List<Epic> epicListExpected = managerExpected.getEpicList();
@@ -117,7 +113,7 @@ class FileBackedTaskManagerTest {
         //when
         Task taskExpected = manager.createTask(new Task("name1", "description1", Status.DONE));
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
         List<Task> list = managerActual.getTasksList();
         Task taskActual = list.getFirst();
 
@@ -138,7 +134,7 @@ class FileBackedTaskManagerTest {
         SubTask subTaskExpected = manager.createSubTask(new SubTask("name", "description", Status.NEW,
                 epic.getId()));
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
         List<SubTask> list = managerActual.getSubTasksList();
         SubTask subTaskActual = list.getFirst();
 
@@ -160,7 +156,7 @@ class FileBackedTaskManagerTest {
         Epic epicExpected = manager.createEpic(new Epic("name", "description"));
 
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
         List<Epic> list = managerActual.getEpicList();
         Epic epicActual = list.getFirst();
 
@@ -190,7 +186,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.updateTask(taskExpected);
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
         Task taskActual = managerActual.getTaskById(1);
 
         //then
@@ -215,7 +211,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.updateSubTask(subTaskExpected);
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
         SubTask subTaskActual = managerActual.getSubTaskById(2);
 
         //then
@@ -240,7 +236,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.updateEpic(epicExpected);
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
         Epic epicActual = managerActual.getEpicById(1);
 
         //then
@@ -267,7 +263,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.deleteTaskById(task.getId());
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
 
         //then
         assertNull(managerActual.getTaskById(task.getId()), "задача не удалилась");
@@ -284,7 +280,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.deleteSubTaskById(subtask.getId());
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
 
         //then
         assertNull(managerActual.getSubTaskById(subtask.getId()), "подзадача не удалилась");
@@ -300,7 +296,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.deleteEpicById(epic.getId());
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
 
         //then
         assertNull(managerActual.getEpicById(epic.getId()), "эпик не удалился");
@@ -317,7 +313,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.deleteAllTasks();
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
         List<Task> taskList = managerActual.getTasksList();
 
         //then
@@ -338,7 +334,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.deleteAllSubTasks();
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
         List<SubTask> subTaskList = managerActual.getSubTasksList();
 
         //then
@@ -358,7 +354,7 @@ class FileBackedTaskManagerTest {
         //when
         manager.deleteAllEpics();
 
-        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(tempFile);
+        FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
         List<Epic> epicList = managerActual.getEpicList();
 
         //then

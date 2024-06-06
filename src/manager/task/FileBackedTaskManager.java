@@ -41,6 +41,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 bw.write(TaskConverter.toString(entry.getValue()));
                 bw.newLine();
             }
+            if (tasks.isEmpty() && subTasks.isEmpty() && epics.isEmpty()) {
+                counterId = 0;
+            }
         } catch (IOException exp) {
             throw new ManagerSaveException("Ошибка записи в файл: " + file.getName(), exp);
         }
