@@ -1,5 +1,6 @@
 package manager.task;
 
+import exception.NotFoundException;
 import manager.history.HistoryManager;
 import model.Epic;
 import model.Status;
@@ -12,11 +13,11 @@ import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private final HashMap<Integer, Task> tasks;
-    private final HashMap<Integer, SubTask> subTasks;
-    private final HashMap<Integer, Epic> epics;
+    protected final HashMap<Integer, Task> tasks;
+    protected final HashMap<Integer, SubTask> subTasks;
+    protected final HashMap<Integer, Epic> epics;
     private final HistoryManager historyManager;
-    private int counterId = 0;
+    protected int counterId = 0;
 
     public InMemoryTaskManager(HistoryManager historyManager) {
         this.tasks  = new HashMap<>();
@@ -88,29 +89,39 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
-        if (tasks.containsKey(task.getId())) {
+        Integer taskId = task.getId();
+        if (tasks.containsKey(taskId)) {
             tasks.put(task.getId(), task);
+        } else {
+            throw new NotFoundException("Не найдена задача, id: " + taskId);
         }
     }
 
     @Override
     public void updateSubTask(SubTask subTask) {
-        SubTask changingSubTask = subTasks.get(subTask.getId());
+        Integer subTaskId = subTask.getId();
+        SubTask changingSubTask = subTasks.get(subTaskId);
         if (changingSubTask == null) {
-            return;
+            throw new NotFoundException("Не найдена подзадача, id: " + subTaskId);
         }
         changingSubTask.setName(subTask.getName());
         changingSubTask.setDescription(subTask.getDescription());
         changingSubTask.setStatus(subTask.getStatus());
 
-        calculateEpicStatus(epics.get(subTask.getEpicId()));
+        Integer epicId = subTask.getEpicId();
+        Epic savedEpic = epics.get(epicId);
+        if (savedEpic == null) {
+            throw new NotFoundException("Не найден эпик, id: " + epicId);
+        }
+
+        calculateEpicStatus(savedEpic);
     }
 
     @Override
     public void updateEpic(Epic epic) {
         Epic changingEpic = epics.get(epic.getId());
         if (changingEpic == null) {
-            return;
+            throw new NotFoundException("Не найден эпик, id: " + epic.getId());
         }
         changingEpic.setName(epic.getName());
         changingEpic.setDescription(epic.getDescription());

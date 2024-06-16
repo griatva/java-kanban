@@ -18,11 +18,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Менеджер")
 class InMemoryTaskManagerTest {
 
-    private static TaskManager manager;
+    private TaskManager manager;
 
     @BeforeEach
     void init() {
         manager = Managers.getDefaults();
+        manager.deleteAllEpics();
+        manager.deleteAllTasks();
+        manager.deleteAllSubTasks();
     }
 
     @Test

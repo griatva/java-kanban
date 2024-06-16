@@ -11,6 +11,13 @@ public class Task {
     private Status status;
     private Integer id;
 
+    public Task(Integer id, String name, Status status, String description) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.id = id;
+    }
+
     public Task(String name, String description, Status status) {
         this.name = name;
         this.description = description;
@@ -20,6 +27,10 @@ public class Task {
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public TaskType getType() {
+        return TaskType.TASK;
     }
 
     public Integer getId() {
