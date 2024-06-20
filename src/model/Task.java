@@ -1,7 +1,8 @@
 package model;
 
 
-
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -11,11 +12,36 @@ public class Task {
     private Status status;
     private Integer id;
 
-    public Task(Integer id, String name, Status status, String description) {
+    private LocalDateTime startDateTime;
+    private Duration duration;
+    private LocalDateTime endDateTime;
+
+    public Task(String name, String description, Status status, LocalDateTime startDateTime, Duration duration) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.startDateTime = startDateTime;
+        this.duration = duration;
+        if (startDateTime == null) {
+            this.endDateTime = null;
+        } else {
+            this.endDateTime = startDateTime.plus(duration);
+        }
+    }
+
+    public Task(Integer id, String name, Status status, String description, LocalDateTime startDateTime,
+                Duration duration) {
         this.name = name;
         this.description = description;
         this.status = status;
         this.id = id;
+        this.startDateTime = startDateTime;
+        this.duration = duration;
+        if (startDateTime == null) {
+            this.endDateTime = null;
+        } else {
+            this.endDateTime = startDateTime.plus(duration);
+        }
     }
 
     public Task(String name, String description, Status status) {
@@ -41,12 +67,36 @@ public class Task {
         this.id = id;
     }
 
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
+    }
+
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
+    }
+
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        return (Objects.equals(id,task.id));
+        return (Objects.equals(id, task.id));
     }
 
     @Override
@@ -93,6 +143,8 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", id=" + id +
+                ", startDateTime=" + startDateTime +
+                ", duration=" + duration +
                 '}';
     }
 }
