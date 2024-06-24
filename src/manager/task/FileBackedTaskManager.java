@@ -86,7 +86,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         if (subTask.getStartDateTime() != null) {
                             manager.prioritizedTasks.add(subTask);
                         }
-                        manager.calculateEpicStatus(manager.epics.get(subTask.getEpicId()));
+                        manager.calculateEpicData(manager.epics.get(subTask.getEpicId()));
                         break;
                 }
                 if (maxId < id) {
@@ -96,7 +96,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             for (SubTask subTask : manager.subTasks.values()) {
                 Epic tiedEpic = manager.epics.get(subTask.getEpicId());
                 tiedEpic.getSubTasksId().add(subTask.getId());
-                manager.calculateEpicStatus(manager.epics.get(subTask.getEpicId()));
+                manager.calculateEpicData(manager.epics.get(subTask.getEpicId()));
             }
         } catch (IOException exp) {
             throw new ManagerIOException("Ошибка чтения файла: " + file.getName(), exp);

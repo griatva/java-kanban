@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Менеджер")
 class InMemoryTaskManagerTest {
 
-    private TaskManager manager;
+    protected TaskManager manager;
 
     @BeforeEach
     void init() {

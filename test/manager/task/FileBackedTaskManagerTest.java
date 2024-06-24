@@ -19,14 +19,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Менеджер из файла")
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
 
-    private TaskManager manager;
     File fileForRecovery = new File("resources/task.csv");
 
     @BeforeEach
     void init() {
-        manager = Managers.getDefaults();
+        this.manager = Managers.getDefaults();
         manager.deleteAllEpics();
         manager.deleteAllTasks();
         manager.deleteAllSubTasks();
