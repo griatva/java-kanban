@@ -1,7 +1,8 @@
 package model;
 
 
-
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -10,12 +11,26 @@ public class Task {
     private String description;
     private Status status;
     private Integer id;
+    private LocalDateTime startDateTime;
+    private Duration duration;
 
-    public Task(Integer id, String name, Status status, String description) {
+
+    public Task(String name, String description, Status status, LocalDateTime startDateTime, Duration duration) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.startDateTime = startDateTime;
+        this.duration = duration;
+    }
+
+    public Task(Integer id, String name, Status status, String description, LocalDateTime startDateTime,
+                Duration duration) {
         this.name = name;
         this.description = description;
         this.status = status;
         this.id = id;
+        this.startDateTime = startDateTime;
+        this.duration = duration;
     }
 
     public Task(String name, String description, Status status) {
@@ -41,12 +56,39 @@ public class Task {
         this.id = id;
     }
 
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
+    }
+
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
+    }
+
+    public LocalDateTime getEndDateTime() {
+        LocalDateTime endDateTime;
+        if (startDateTime == null) {
+            endDateTime = null;
+        } else {
+            endDateTime = startDateTime.plus(duration);
+        }
+        return endDateTime;
+    }
+
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        return (Objects.equals(id,task.id));
+        return (Objects.equals(id, task.id));
     }
 
     @Override
@@ -93,6 +135,8 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", id=" + id +
+                ", startDateTime=" + startDateTime +
+                ", duration=" + duration +
                 '}';
     }
 }
