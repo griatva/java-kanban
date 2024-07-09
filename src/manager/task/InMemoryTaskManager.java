@@ -215,6 +215,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteSubTaskById(Integer id) {
         SubTask subTaskToRemove = subTasks.remove(id);
+        if (subTaskToRemove == null) {
+            throw new NotFoundException("Подзадача не найдена, id: " + id);
+        }
         Epic epic = epics.get(subTaskToRemove.getEpicId());
         if (epic == null) {
             throw new NotFoundException("Эпик не найден, id: " + subTaskToRemove.getEpicId());
