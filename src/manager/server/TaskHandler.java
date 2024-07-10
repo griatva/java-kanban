@@ -9,12 +9,10 @@ import model.Task;
 
 import java.io.IOException;
 
-public class TaskHandler extends BaseHttpHandler implements HttpHandler, ResponseWriter {
-
-    protected final TaskManager manager;
+public class TaskHandler extends BaseHttpHandler implements HttpHandler {
 
     public TaskHandler(TaskManager manager) {
-        this.manager = manager;
+        super(manager);
     }
 
     @Override
@@ -63,14 +61,13 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler, Respons
         }
     }
 
-    @Override
+
     protected void handleGetEntities(HttpExchange exchange) throws IOException {
         try (exchange) {
             writeResponse(exchange, gson.toJson(manager.getTasksList()), 200);
         }
     }
 
-    @Override
     protected void handleGetEntityById(HttpExchange exchange) throws IOException {
         try (exchange) {
             String[] pathParts = exchange.getRequestURI().getPath().split("/");
@@ -83,7 +80,6 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler, Respons
         }
     }
 
-    @Override
     protected void handlePostEntityCreate(HttpExchange exchange, String requestBody) throws IOException {
         try (exchange) {
             try {
@@ -101,7 +97,6 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler, Respons
         }
     }
 
-    @Override
     protected void handlePostEntityUpdate(HttpExchange exchange, String requestBody) throws IOException {
         try (exchange) {
             try {
@@ -120,7 +115,6 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler, Respons
         }
     }
 
-    @Override
     protected void handleDeleteEntityById(HttpExchange exchange) throws IOException {
         try (exchange) {
             String[] pathParts = exchange.getRequestURI().getPath().split("/");
@@ -136,7 +130,6 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler, Respons
     }
 
 
-    @Override
     protected Endpoint getEndpoint(String requestPath, String requestMethod, String requestBody) {
         String[] pathParts = requestPath.split("/");
 

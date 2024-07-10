@@ -8,12 +8,10 @@ import model.Epic;
 
 import java.io.IOException;
 
-public class EpicHandler extends BaseHttpHandler implements HttpHandler, ResponseWriter {
-
-    protected final TaskManager manager;
+public class EpicHandler extends BaseHttpHandler implements HttpHandler {
 
     public EpicHandler(TaskManager manager) {
-        this.manager = manager;
+        super(manager);
     }
 
     @Override
@@ -66,14 +64,12 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler, Respons
         }
     }
 
-    @Override
     protected void handleGetEntities(HttpExchange exchange) throws IOException {
         try (exchange) {
             writeResponse(exchange, gson.toJson(manager.getEpicList()), 200);
         }
     }
 
-    @Override
     protected void handleGetEntityById(HttpExchange exchange) throws IOException {
         try (exchange) {
             String[] pathParts = exchange.getRequestURI().getPath().split("/");
@@ -86,7 +82,6 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler, Respons
         }
     }
 
-    @Override
     protected void handlePostEntityCreate(HttpExchange exchange, String requestBody) throws IOException {
         try (exchange) {
             Epic epic = gson.fromJson(requestBody, Epic.class);
@@ -96,7 +91,6 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler, Respons
         }
     }
 
-    @Override
     protected void handlePostEntityUpdate(HttpExchange exchange, String requestBody) throws IOException {
         try (exchange) {
             Epic epic = gson.fromJson(requestBody, Epic.class);
@@ -108,7 +102,6 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler, Respons
         }
     }
 
-    @Override
     protected void handleDeleteEntityById(HttpExchange exchange) throws IOException {
         try (exchange) {
             String[] pathParts = exchange.getRequestURI().getPath().split("/");
@@ -137,7 +130,6 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler, Respons
     }
 
 
-    @Override
     protected Endpoint getEndpoint(String requestPath, String requestMethod, String requestBody) {
         String[] pathParts = requestPath.split("/");
 

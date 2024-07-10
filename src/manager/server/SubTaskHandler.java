@@ -9,13 +9,10 @@ import model.SubTask;
 
 import java.io.IOException;
 
-public class SubTaskHandler extends BaseHttpHandler implements HttpHandler, ResponseWriter {
-
-
-    protected final TaskManager manager;
+public class SubTaskHandler extends BaseHttpHandler implements HttpHandler {
 
     public SubTaskHandler(TaskManager manager) {
-        this.manager = manager;
+        super(manager);
     }
 
     @Override
@@ -64,14 +61,12 @@ public class SubTaskHandler extends BaseHttpHandler implements HttpHandler, Resp
         }
     }
 
-    @Override
     protected void handleGetEntities(HttpExchange exchange) throws IOException {
         try (exchange) {
             writeResponse(exchange, gson.toJson(manager.getSubTasksList()), 200);
         }
     }
 
-    @Override
     protected void handleGetEntityById(HttpExchange exchange) throws IOException {
         try (exchange) {
             String[] pathParts = exchange.getRequestURI().getPath().split("/");
@@ -84,7 +79,6 @@ public class SubTaskHandler extends BaseHttpHandler implements HttpHandler, Resp
         }
     }
 
-    @Override
     protected void handlePostEntityCreate(HttpExchange exchange, String requestBody) throws IOException {
         try (exchange) {
             SubTask subtask = gson.fromJson(requestBody, SubTask.class);
@@ -96,7 +90,6 @@ public class SubTaskHandler extends BaseHttpHandler implements HttpHandler, Resp
         }
     }
 
-    @Override
     protected void handlePostEntityUpdate(HttpExchange exchange, String requestBody) throws IOException {
         try (exchange) {
             SubTask subtask = gson.fromJson(requestBody, SubTask.class);
@@ -110,7 +103,6 @@ public class SubTaskHandler extends BaseHttpHandler implements HttpHandler, Resp
         }
     }
 
-    @Override
     protected void handleDeleteEntityById(HttpExchange exchange) throws IOException {
         try (exchange) {
             String[] pathParts = exchange.getRequestURI().getPath().split("/");
@@ -124,7 +116,6 @@ public class SubTaskHandler extends BaseHttpHandler implements HttpHandler, Resp
         }
     }
 
-    @Override
     protected Endpoint getEndpoint(String requestPath, String requestMethod, String requestBody) {
         String[] pathParts = requestPath.split("/");
 
