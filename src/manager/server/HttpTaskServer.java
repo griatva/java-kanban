@@ -18,8 +18,8 @@ public class HttpTaskServer {
     private static final int PORT = 8080;
 
     private final TaskManager manager;
-    Gson gson;
-    HttpServer server;
+    private final Gson gson;
+    private final HttpServer server;
 
     public HttpTaskServer(TaskManager manager) {
         this.manager = manager;

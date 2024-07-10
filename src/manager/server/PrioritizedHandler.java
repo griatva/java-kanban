@@ -7,10 +7,10 @@ import manager.task.TaskManager;
 
 import java.io.IOException;
 
-public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
+public class PrioritizedHandler implements HttpHandler, ResponseWriter {
 
-    TaskManager manager;
-    Gson gson = HttpTaskServer.getGson();
+    private final TaskManager manager;
+    private final Gson gson = HttpTaskServer.getGson();
 
     public PrioritizedHandler(TaskManager manager) {
         this.manager = manager;

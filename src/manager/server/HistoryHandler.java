@@ -7,10 +7,10 @@ import manager.task.TaskManager;
 
 import java.io.IOException;
 
-public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
+public class HistoryHandler implements HttpHandler, ResponseWriter {
 
-    TaskManager manager;
-    Gson gson = HttpTaskServer.getGson();
+    private final TaskManager manager;
+    private final Gson gson = HttpTaskServer.getGson();
 
     public HistoryHandler(TaskManager manager) {
         this.manager = manager;

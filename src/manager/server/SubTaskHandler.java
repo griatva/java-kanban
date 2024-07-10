@@ -9,10 +9,12 @@ import model.SubTask;
 
 import java.io.IOException;
 
-public class SubTaskHandler extends TaskHandler implements HttpHandler {
+public class SubTaskHandler extends BaseHttpHandler implements HttpHandler, ResponseWriter {
 
+
+    protected final TaskManager manager;
     public SubTaskHandler(TaskManager manager) {
-        super(manager);
+        this.manager = manager;
     }
 
     @Override
@@ -26,24 +28,24 @@ public class SubTaskHandler extends TaskHandler implements HttpHandler {
                         requestBody);
 
                 switch (endpoint) {
-                    case GET_SUBTASKS: {
-                        handleGetTasks(exchange);
+                    case GET_ENTITIES: {
+                        handleGetEntities(exchange);
                         break;
                     }
-                    case GET_SUBTASK_BY_ID: {
-                        handleGetTaskById(exchange);
+                    case GET_ENTITY_BY_ID: {
+                        handleGetEntityById(exchange);
                         break;
                     }
-                    case POST_SUBTASK_CREATE: {
-                        handlePostTaskCreate(exchange, requestBody);
+                    case POST_ENTITY_CREATE: {
+                        handlePostEntityCreate(exchange, requestBody);
                         break;
                     }
-                    case POST_SUBTASK_UPDATE: {
-                        handlePostTaskUpdate(exchange, requestBody);
+                    case POST_ENTITY_UPDATE: {
+                        handlePostEntityUpdate(exchange, requestBody);
                         break;
                     }
-                    case DELETE_SUBTASK_BY_ID: {
-                        handleDeleteTaskById(exchange);
+                    case DELETE_ENTITY_BY_ID: {
+                        handleDeleteEntityById(exchange);
                         break;
                     }
                     case UNKNOWN:
@@ -62,14 +64,14 @@ public class SubTaskHandler extends TaskHandler implements HttpHandler {
     }
 
     @Override
-    protected void handleGetTasks(HttpExchange exchange) throws IOException {
+    protected void handleGetEntities(HttpExchange exchange) throws IOException {
         try (exchange) {
             writeResponse(exchange, gson.toJson(manager.getSubTasksList()), 200);
         }
     }
 
     @Override
-    protected void handleGetTaskById(HttpExchange exchange) throws IOException {
+    protected void handleGetEntityById(HttpExchange exchange) throws IOException {
         try (exchange) {
             String[] pathParts = exchange.getRequestURI().getPath().split("/");
             Integer id = Integer.parseInt(pathParts[2]);
@@ -82,7 +84,7 @@ public class SubTaskHandler extends TaskHandler implements HttpHandler {
     }
 
     @Override
-    protected void handlePostTaskCreate(HttpExchange exchange, String requestBody) throws IOException {
+    protected void handlePostEntityCreate(HttpExchange exchange, String requestBody) throws IOException {
         try (exchange) {
             SubTask subtask = gson.fromJson(requestBody, SubTask.class);
             try {
@@ -94,7 +96,7 @@ public class SubTaskHandler extends TaskHandler implements HttpHandler {
     }
 
     @Override
-    protected void handlePostTaskUpdate(HttpExchange exchange, String requestBody) throws IOException {
+    protected void handlePostEntityUpdate(HttpExchange exchange, String requestBody) throws IOException {
         try (exchange) {
             SubTask subtask = gson.fromJson(requestBody, SubTask.class);
             try {
@@ -108,7 +110,7 @@ public class SubTaskHandler extends TaskHandler implements HttpHandler {
     }
 
     @Override
-    protected void handleDeleteTaskById(HttpExchange exchange) throws IOException {
+    protected void handleDeleteEntityById(HttpExchange exchange) throws IOException {
         try (exchange) {
             String[] pathParts = exchange.getRequestURI().getPath().split("/");
             Integer id = Integer.parseInt(pathParts[2]);
@@ -127,10 +129,10 @@ public class SubTaskHandler extends TaskHandler implements HttpHandler {
 
         if (requestMethod.equals("GET")) {
             if (pathParts.length == 2) {
-                return Endpoint.GET_SUBTASKS;
+                return Endpoint.GET_ENTITIES;
             }
             if (pathParts.length == 3) {
-                return Endpoint.GET_SUBTASK_BY_ID;
+                return Endpoint.GET_ENTITY_BY_ID;
             }
         }
 
@@ -139,14 +141,14 @@ public class SubTaskHandler extends TaskHandler implements HttpHandler {
             SubTask subTask = gson.fromJson(requestBody, SubTask.class);
             Integer subTaskId = subTask.getId();
             if (subTaskId == null) {
-                return Endpoint.POST_SUBTASK_CREATE;
+                return Endpoint.POST_ENTITY_CREATE;
             } else {
-                return Endpoint.POST_SUBTASK_UPDATE;
+                return Endpoint.POST_ENTITY_UPDATE;
             }
         }
 
         if (requestMethod.equals("DELETE")) {
-            return Endpoint.DELETE_SUBTASK_BY_ID;
+            return Endpoint.DELETE_ENTITY_BY_ID;
         }
         return Endpoint.UNKNOWN;
     }

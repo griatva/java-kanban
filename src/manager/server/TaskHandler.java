@@ -1,6 +1,5 @@
 package manager.server;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import exception.NotFoundException;
@@ -9,13 +8,10 @@ import manager.task.TaskManager;
 import model.Task;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
-public class TaskHandler extends BaseHttpHandler implements HttpHandler {
+public class TaskHandler extends BaseHttpHandler implements HttpHandler, ResponseWriter {
 
-    TaskManager manager;
-    Gson gson = HttpTaskServer.getGson();
+    protected final TaskManager manager;
 
     public TaskHandler(TaskManager manager) {
         this.manager = manager;
@@ -32,24 +28,24 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                         requestBody);
 
                 switch (endpoint) {
-                    case GET_TASKS: {
-                        handleGetTasks(exchange);
+                    case GET_ENTITIES: {
+                        handleGetEntities(exchange);
                         break;
                     }
-                    case GET_TASK_BY_ID: {
-                        handleGetTaskById(exchange);
+                    case GET_ENTITY_BY_ID: {
+                        handleGetEntityById(exchange);
                         break;
                     }
-                    case POST_TASK_CREATE: {
-                        handlePostTaskCreate(exchange, requestBody);
+                    case POST_ENTITY_CREATE: {
+                        handlePostEntityCreate(exchange, requestBody);
                         break;
                     }
-                    case POST_TASK_UPDATE: {
-                        handlePostTaskUpdate(exchange, requestBody);
+                    case POST_ENTITY_UPDATE: {
+                        handlePostEntityUpdate(exchange, requestBody);
                         break;
                     }
-                    case DELETE_TASK_BY_ID: {
-                        handleDeleteTaskById(exchange);
+                    case DELETE_ENTITY_BY_ID: {
+                        handleDeleteEntityById(exchange);
                         break;
                     }
                     case UNKNOWN:
@@ -67,18 +63,15 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    protected String readRequestBody(HttpExchange exchange) throws IOException {
-        InputStream inputStream = exchange.getRequestBody();
-        return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-    }
-
-    protected void handleGetTasks(HttpExchange exchange) throws IOException {
+    @Override
+    protected void handleGetEntities(HttpExchange exchange) throws IOException {
         try (exchange) {
             writeResponse(exchange, gson.toJson(manager.getTasksList()), 200);
         }
     }
 
-    protected void handleGetTaskById(HttpExchange exchange) throws IOException {
+    @Override
+    protected void handleGetEntityById(HttpExchange exchange) throws IOException {
         try (exchange) {
             String[] pathParts = exchange.getRequestURI().getPath().split("/");
             Integer id = Integer.parseInt(pathParts[2]);
@@ -90,7 +83,8 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    protected void handlePostTaskCreate(HttpExchange exchange, String requestBody) throws IOException {
+    @Override
+    protected void handlePostEntityCreate(HttpExchange exchange, String requestBody) throws IOException {
         try (exchange) {
             try {
                 Task task = gson.fromJson(requestBody, Task.class);
@@ -107,7 +101,8 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    protected void handlePostTaskUpdate(HttpExchange exchange, String requestBody) throws IOException {
+    @Override
+    protected void handlePostEntityUpdate(HttpExchange exchange, String requestBody) throws IOException {
         try (exchange) {
             try {
                 Task task = gson.fromJson(requestBody, Task.class);
@@ -125,7 +120,8 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    protected void handleDeleteTaskById(HttpExchange exchange) throws IOException {
+    @Override
+    protected void handleDeleteEntityById(HttpExchange exchange) throws IOException {
         try (exchange) {
             String[] pathParts = exchange.getRequestURI().getPath().split("/");
             Integer id = Integer.parseInt(pathParts[2]);
@@ -140,15 +136,16 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
     }
 
 
+    @Override
     protected Endpoint getEndpoint(String requestPath, String requestMethod, String requestBody) {
         String[] pathParts = requestPath.split("/");
 
         if (requestMethod.equals("GET")) {
             if (pathParts.length == 2) {
-                return Endpoint.GET_TASKS;
+                return Endpoint.GET_ENTITIES;
             }
             if (pathParts.length == 3) {
-                return Endpoint.GET_TASK_BY_ID;
+                return Endpoint.GET_ENTITY_BY_ID;
             }
         }
 
@@ -157,14 +154,14 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
             Task task = gson.fromJson(requestBody, Task.class);
             Integer taskId = task.getId();
             if (taskId == null) {
-                return Endpoint.POST_TASK_CREATE;
+                return Endpoint.POST_ENTITY_CREATE;
             } else {
-                return Endpoint.POST_TASK_UPDATE;
+                return Endpoint.POST_ENTITY_UPDATE;
             }
         }
 
         if (requestMethod.equals("DELETE")) {
-            return Endpoint.DELETE_TASK_BY_ID;
+            return Endpoint.DELETE_ENTITY_BY_ID;
         }
         return Endpoint.UNKNOWN;
     }
