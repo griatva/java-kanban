@@ -26,7 +26,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Сервер")
+@DisplayName("Server")
 class HttpTaskServerTest {
 
     TaskManager manager = new InMemoryTaskManager(new InMemoryHistoryManager());
@@ -47,7 +47,7 @@ class HttpTaskServerTest {
     }
 
     @Test
-    @DisplayName("Должен создать задачу, когда приходит запрос POST/tasks и у задачи нет id")
+    @DisplayName("Should create a task when a POST /tasks request is received and the task has no ID")
     public void shouldCreateTask_POSTTasksRequestArrivesAndTaskDoesNotHaveId() throws IOException, InterruptedException {
         Task taskExpected = new Task("test name", "test description", Status.DONE,
                 LocalDateTime.of(2024, 6, 18, 13, 17), Duration.ofMinutes(60));
@@ -67,21 +67,21 @@ class HttpTaskServerTest {
         List<Task> tasksFromManager = manager.getTasksList();
         Task taskActual = tasksFromManager.getFirst();
 
-        assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(tasksFromManager, "Tasks are not returned");
+        assertEquals(1, tasksFromManager.size(), "Incorrect number of tasks");
 
-        assertNotEquals(taskExpected.getId(), taskActual.getId(), "id не сгенерировано");
-        assertEquals(taskExpected.getName(), taskActual.getName(), "не совпадает name");
-        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "не совпадают description");
-        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
+        assertNotEquals(taskExpected.getId(), taskActual.getId(), "ID was not generated");
+        assertEquals(taskExpected.getName(), taskActual.getName(), "Names do not match");
+        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "Descriptions do not match");
+        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "Statuses do not match");
 
-        assertEquals(taskExpected.getStartDateTime(), taskActual.getStartDateTime(), "не совпадает startTime");
-        assertEquals(taskExpected.getDuration(), taskActual.getDuration(), "не совпадает duration");
-        assertEquals(taskExpected.getEndDateTime(), taskActual.getEndDateTime(), "не совпадает endTime");
+        assertEquals(taskExpected.getStartDateTime(), taskActual.getStartDateTime(), "Start time does not match");
+        assertEquals(taskExpected.getDuration(), taskActual.getDuration(), "Duration does not match");
+        assertEquals(taskExpected.getEndDateTime(), taskActual.getEndDateTime(), "End time does not match");
     }
 
     @Test
-    @DisplayName("Должен возвращать код ошибки, когда приходит запрос POST/tasks и задачи пересекаются по времени")
+    @DisplayName("Should return an error status code when a POST /tasks request is received and tasks overlap in time")
     public void shouldReturnErrorCode_POSTTasksRequestArrivesAndTasksIntersectByTime() throws IOException, InterruptedException {
         Task task1 = manager.createTask(new Task("test name", "test description", Status.DONE,
                 LocalDateTime.of(2024, 6, 18, 13, 20), Duration.ofMinutes(60)));
@@ -104,7 +104,7 @@ class HttpTaskServerTest {
 
 
     @Test
-    @DisplayName("Должен обновить задачу, когда приходит запрос POST/tasks и у задачи есть id")
+    @DisplayName("Should update a task when a POST /tasks request is received and the task has an ID")
     public void shouldUpdateTask_POSTTasksRequestArrivesAndTaskHaveId() throws IOException, InterruptedException {
 
         Task taskForChange = manager.createTask(new Task("test name", "test description", Status.DONE,
@@ -128,22 +128,22 @@ class HttpTaskServerTest {
         Task taskActual = tasksFromManager.getFirst();
 
 
-        assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(tasksFromManager, "Tasks are not returned");
+        assertEquals(1, tasksFromManager.size(), "Incorrect number of tasks");
 
-        assertEquals(taskExpected.getId(), taskActual.getId(), "id не совпадают");
-        assertEquals(taskExpected.getName(), taskActual.getName(), "не совпадает name");
-        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "не совпадают description");
-        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
+        assertEquals(taskExpected.getId(), taskActual.getId(), "IDs do not match");
+        assertEquals(taskExpected.getName(), taskActual.getName(), "Names do not match");
+        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "Descriptions do not match");
+        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "Statuses do not match");
 
-        assertEquals(taskExpected.getStartDateTime(), taskActual.getStartDateTime(), "не совпадает startTime");
-        assertEquals(taskExpected.getDuration(), taskActual.getDuration(), "не совпадает duration");
-        assertEquals(taskExpected.getEndDateTime(), taskActual.getEndDateTime(), "не совпадает endTime");
+        assertEquals(taskExpected.getStartDateTime(), taskActual.getStartDateTime(), "Start time does not match");
+        assertEquals(taskExpected.getDuration(), taskActual.getDuration(), "Duration does not match");
+        assertEquals(taskExpected.getEndDateTime(), taskActual.getEndDateTime(), "End time does not match");
     }
 
 
     @Test
-    @DisplayName("Должен вернуть список задач, когда приходит запрос GET/tasks")
+    @DisplayName("Should return a list of tasks when a GET /tasks request is received")
     public void shouldGetTasksList_GETTasksRequestArrives() throws IOException, InterruptedException {
 
         Task taskExpected1 = manager.createTask(new Task("test name1", "test description1", Status.DONE,
@@ -168,30 +168,30 @@ class HttpTaskServerTest {
         Task taskActual1 = tasksFromManager.getFirst();
         Task taskActual2 = tasksFromManager.getLast();
 
-        assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(2, tasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(tasksFromManager, "Tasks are not returned");
+        assertEquals(2, tasksFromManager.size(), "Incorrect number of tasks");
 
-        assertEquals(taskExpected1.getId(), taskActual1.getId(), "id не совпадает");
-        assertEquals(taskExpected1.getName(), taskActual1.getName(), "не совпадает name");
-        assertEquals(taskExpected1.getDescription(), taskActual1.getDescription(), "не совпадают description");
-        assertEquals(taskExpected1.getStatus(), taskActual1.getStatus(), "не совпадают status");
-        assertEquals(taskExpected1.getStartDateTime(), taskActual1.getStartDateTime(), "не совпадает startTime");
-        assertEquals(taskExpected1.getDuration(), taskActual1.getDuration(), "не совпадает duration");
-        assertEquals(taskExpected1.getEndDateTime(), taskActual1.getEndDateTime(), "не совпадает endTime");
+        assertEquals(taskExpected1.getId(), taskActual1.getId(), "IDs do not match");
+        assertEquals(taskExpected1.getName(), taskActual1.getName(), "Names do not match");
+        assertEquals(taskExpected1.getDescription(), taskActual1.getDescription(), "Descriptions do not match");
+        assertEquals(taskExpected1.getStatus(), taskActual1.getStatus(), "Statuses do not match");
+        assertEquals(taskExpected1.getStartDateTime(), taskActual1.getStartDateTime(), "Start time does not match");
+        assertEquals(taskExpected1.getDuration(), taskActual1.getDuration(), "Duration does not match");
+        assertEquals(taskExpected1.getEndDateTime(), taskActual1.getEndDateTime(), "End time does not match");
 
-        assertEquals(taskExpected2.getId(), taskActual2.getId(), "id не совпадает");
-        assertEquals(taskExpected2.getName(), taskActual2.getName(), "не совпадает name");
-        assertEquals(taskExpected2.getDescription(), taskActual2.getDescription(), "не совпадают description");
-        assertEquals(taskExpected2.getStatus(), taskActual2.getStatus(), "не совпадают status");
-        assertEquals(taskExpected2.getStartDateTime(), taskActual2.getStartDateTime(), "не совпадает startTime");
-        assertEquals(taskExpected2.getDuration(), taskActual2.getDuration(), "не совпадает duration");
-        assertEquals(taskExpected2.getEndDateTime(), taskActual2.getEndDateTime(), "не совпадает endTime");
+        assertEquals(taskExpected2.getId(), taskActual2.getId(), "IDs do not match");
+        assertEquals(taskExpected2.getName(), taskActual2.getName(), "Names do not match");
+        assertEquals(taskExpected2.getDescription(), taskActual2.getDescription(), "Descriptions do not match");
+        assertEquals(taskExpected2.getStatus(), taskActual2.getStatus(), "Statuses do not match");
+        assertEquals(taskExpected2.getStartDateTime(), taskActual2.getStartDateTime(), "Start time does not match");
+        assertEquals(taskExpected2.getDuration(), taskActual2.getDuration(), "Duration does not match");
+        assertEquals(taskExpected2.getEndDateTime(), taskActual2.getEndDateTime(), "End time does not match");
 
     }
 
 
     @Test
-    @DisplayName("Должен вернуть задачу, когда приходит запрос GET/tasks/{id}")
+    @DisplayName("Should return a task when a GET /tasks/{id} request is received")
     public void shouldGetTaskById_GETTasksIdRequestArrives() throws IOException, InterruptedException {
 
         Task taskExpected = manager.createTask(new Task("test name1", "test description1", Status.DONE,
@@ -212,18 +212,18 @@ class HttpTaskServerTest {
         String responseBody = response.body();
         Task taskActual = gson.fromJson(responseBody, Task.class);
 
-        assertEquals(taskExpected.getId(), taskActual.getId(), "id не совпадает");
-        assertEquals(taskExpected.getName(), taskActual.getName(), "не совпадает name");
-        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "не совпадают description");
-        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
-        assertEquals(taskExpected.getStartDateTime(), taskActual.getStartDateTime(), "не совпадает startTime");
-        assertEquals(taskExpected.getDuration(), taskActual.getDuration(), "не совпадает duration");
-        assertEquals(taskExpected.getEndDateTime(), taskActual.getEndDateTime(), "не совпадает endTime");
+        assertEquals(taskExpected.getId(), taskActual.getId(), "IDs do not match");
+        assertEquals(taskExpected.getName(), taskActual.getName(), "Names do not match");
+        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "Descriptions do not match");
+        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "Statuses do not match");
+        assertEquals(taskExpected.getStartDateTime(), taskActual.getStartDateTime(), "Start time does not match");
+        assertEquals(taskExpected.getDuration(), taskActual.getDuration(), "Duration does not match");
+        assertEquals(taskExpected.getEndDateTime(), taskActual.getEndDateTime(), "End time does not match");
 
     }
 
     @Test
-    @DisplayName("Должен вернуть код ошибки, когда приходит запрос GET/tasks/{id} и задача не найдена")
+    @DisplayName("Should return an error status code when a GET /tasks/{id} request is received and the task is not found")
     public void shouldReturnErrorCode_GETTasksIdRequestArrivesAndTaskNotFound() throws IOException, InterruptedException {
 
         Task task = manager.createTask(new Task("test name1", "test description1", Status.DONE,
@@ -245,7 +245,7 @@ class HttpTaskServerTest {
 
 
     @Test
-    @DisplayName("Должен удалить задачу, когда приходит запрос DELETE/task/{id}")
+    @DisplayName("Should delete a task when a DELETE /task/{id} request is received")
     public void shouldDeleteTask_DELETETasksIdRequestArrives() throws IOException, InterruptedException {
 
         Task taskExpected = manager.createTask(new Task("test name1", "test description1", Status.DONE,
@@ -263,13 +263,13 @@ class HttpTaskServerTest {
         assertEquals(204, response.statusCode());
 
         List<Task> tasksFromManager = manager.getTasksList();
-        assertEquals(0, tasksFromManager.size(), "Задача не удалилась, список не пуст");
+        assertEquals(0, tasksFromManager.size(), "Task was not deleted, the list is not empty");
         assertThrows(NotFoundException.class, () -> manager.getTaskById(1),
-                "задача не удалилась, исключение не выброшено");
+                "Task was not deleted, no exception was thrown");
     }
 
     @Test
-    @DisplayName("Должен вернуть код ошибки, когда приходит запрос DELETE/tasks/{id} и задача не найдена")
+    @DisplayName("Should return an error code for DELETE /tasks/{id} when the task does not exist")
     public void shouldReturnErrorCode_DELETETasksIdRequestArrivesAndTaskNotFound() throws IOException, InterruptedException {
 
         Task task = manager.createTask(new Task("test name1", "test description1", Status.DONE,
@@ -289,7 +289,7 @@ class HttpTaskServerTest {
     }
 
     @Test
-    @DisplayName("Должен создать подзадачу, когда приходит запрос POST/subtasks и у подзадачи нет id")
+    @DisplayName("Should create a subtask when a POST /subtasks request is received and the subtask has no ID")
     public void shouldCreateSubTask_POSTSubTasksRequestArrivesAndSubTaskDoesNotHaveId() throws IOException, InterruptedException {
         Epic epic = manager.createEpic(new Epic("test name", "test description"));
         SubTask subtaskExpected = new SubTask("test name", Status.IN_PROGRESS, "test description",
@@ -311,21 +311,21 @@ class HttpTaskServerTest {
         SubTask subtaskActual = subtasksFromManager.getFirst();
 
 
-        assertNotNull(subtasksFromManager, "Задачи не возвращаются");
-        assertEquals(1, subtasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(subtasksFromManager, "Tasks are not returned");
+        assertEquals(1, subtasksFromManager.size(), "Incorrect number of tasks");
 
-        assertNotEquals(subtaskExpected.getId(), subtaskActual.getId(), "id не сгенерировано");
-        assertEquals(subtaskExpected.getName(), subtaskActual.getName(), "не совпадает name");
-        assertEquals(subtaskExpected.getDescription(), subtaskActual.getDescription(), "не совпадают description");
-        assertEquals(subtaskExpected.getStatus(), subtaskActual.getStatus(), "не совпадают status");
+        assertNotEquals(subtaskExpected.getId(), subtaskActual.getId(), "ID was not generated");
+        assertEquals(subtaskExpected.getName(), subtaskActual.getName(), "Names do not match");
+        assertEquals(subtaskExpected.getDescription(), subtaskActual.getDescription(), "Descriptions do not match");
+        assertEquals(subtaskExpected.getStatus(), subtaskActual.getStatus(), "Statuses do not match");
 
-        assertEquals(subtaskExpected.getStartDateTime(), subtaskActual.getStartDateTime(), "не совпадает startTime");
-        assertEquals(subtaskExpected.getDuration(), subtaskActual.getDuration(), "не совпадает duration");
-        assertEquals(subtaskExpected.getEndDateTime(), subtaskActual.getEndDateTime(), "не совпадает endTime");
+        assertEquals(subtaskExpected.getStartDateTime(), subtaskActual.getStartDateTime(), "Start time does not match");
+        assertEquals(subtaskExpected.getDuration(), subtaskActual.getDuration(), "Duration does not match");
+        assertEquals(subtaskExpected.getEndDateTime(), subtaskActual.getEndDateTime(), "End time does not match");
     }
 
     @Test
-    @DisplayName("Должен возвращать код ошибки, когда приходит запрос POST/subtasks и задачи пересекаются по времени")
+    @DisplayName("Should return an error code for POST /subtasks when there is a time conflict")
     public void shouldReturnErrorCode_POSTSubTasksRequestArrivesAndSubTasksIntersectByTime() throws IOException, InterruptedException {
         Epic epic = manager.createEpic(new Epic("test name", "test description"));
         SubTask subtask1 = manager.createSubTask(new SubTask("test name", Status.IN_PROGRESS, "test description",
@@ -348,7 +348,7 @@ class HttpTaskServerTest {
     }
 
     @Test
-    @DisplayName("Должен обновить подзадачу, когда приходит запрос POST/subtasks и у подзадачи есть id")
+    @DisplayName("Should update a subtask when a POST /subtasks request is received and the subtask has an ID")
     public void shouldUpdateSubTask_POSTSubTasksRequestArrivesAndSubTaskHaveId() throws IOException, InterruptedException {
 
         Epic epic = manager.createEpic(new Epic("test name", "test description"));
@@ -374,21 +374,21 @@ class HttpTaskServerTest {
         SubTask subtaskActual = tasksFromManager.getFirst();
 
 
-        assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(tasksFromManager, "Tasks are not returned");
+        assertEquals(1, tasksFromManager.size(), "Incorrect number of tasks");
 
-        assertEquals(subtaskExpected.getId(), subtaskActual.getId(), "id не совпадают");
-        assertEquals(subtaskExpected.getName(), subtaskActual.getName(), "не совпадает name");
-        assertEquals(subtaskExpected.getDescription(), subtaskActual.getDescription(), "не совпадают description");
-        assertEquals(subtaskExpected.getStatus(), subtaskActual.getStatus(), "не совпадают status");
+        assertEquals(subtaskExpected.getId(), subtaskActual.getId(), "IDs do not match");
+        assertEquals(subtaskExpected.getName(), subtaskActual.getName(), "Names do not match");
+        assertEquals(subtaskExpected.getDescription(), subtaskActual.getDescription(), "Descriptions do not match");
+        assertEquals(subtaskExpected.getStatus(), subtaskActual.getStatus(), "Statuses do not match");
 
-        assertEquals(subtaskExpected.getStartDateTime(), subtaskActual.getStartDateTime(), "не совпадает startTime");
-        assertEquals(subtaskExpected.getDuration(), subtaskActual.getDuration(), "не совпадает duration");
-        assertEquals(subtaskExpected.getEndDateTime(), subtaskActual.getEndDateTime(), "не совпадает endTime");
+        assertEquals(subtaskExpected.getStartDateTime(), subtaskActual.getStartDateTime(), "Start time does not match");
+        assertEquals(subtaskExpected.getDuration(), subtaskActual.getDuration(), "Duration does not match");
+        assertEquals(subtaskExpected.getEndDateTime(), subtaskActual.getEndDateTime(), "End time does not match");
     }
 
     @Test
-    @DisplayName("Должен вернуть список подзадач, когда приходит запрос GET/subtasks")
+    @DisplayName("Should return a list of subtasks when a GET /subtasks request is received")
     public void shouldGetSubTasksList_GETSubTasksRequestArrives() throws IOException, InterruptedException {
 
         Epic epic = manager.createEpic(new Epic("test name", "test description"));
@@ -416,29 +416,29 @@ class HttpTaskServerTest {
         SubTask subtaskActual1 = subtasksFromManager.getFirst();
         SubTask subtaskActual2 = subtasksFromManager.getLast();
 
-        assertNotNull(subtasksFromManager, "Задачи не возвращаются");
-        assertEquals(2, subtasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(subtasksFromManager, "Tasks are not returned");
+        assertEquals(2, subtasksFromManager.size(), "Incorrect number of tasks");
 
-        assertEquals(subtaskExpected1.getId(), subtaskActual1.getId(), "id не совпадает");
-        assertEquals(subtaskExpected1.getName(), subtaskActual1.getName(), "не совпадает name");
-        assertEquals(subtaskExpected1.getDescription(), subtaskActual1.getDescription(), "не совпадают description");
-        assertEquals(subtaskExpected1.getStatus(), subtaskActual1.getStatus(), "не совпадают status");
-        assertEquals(subtaskExpected1.getStartDateTime(), subtaskActual1.getStartDateTime(), "не совпадает startTime");
-        assertEquals(subtaskExpected1.getDuration(), subtaskActual1.getDuration(), "не совпадает duration");
-        assertEquals(subtaskExpected1.getEndDateTime(), subtaskActual1.getEndDateTime(), "не совпадает endTime");
+        assertEquals(subtaskExpected1.getId(), subtaskActual1.getId(), "IDs do not match");
+        assertEquals(subtaskExpected1.getName(), subtaskActual1.getName(), "Names do not match");
+        assertEquals(subtaskExpected1.getDescription(), subtaskActual1.getDescription(), "Descriptions do not match");
+        assertEquals(subtaskExpected1.getStatus(), subtaskActual1.getStatus(), "Statuses do not match");
+        assertEquals(subtaskExpected1.getStartDateTime(), subtaskActual1.getStartDateTime(), "Start time does not match");
+        assertEquals(subtaskExpected1.getDuration(), subtaskActual1.getDuration(), "Duration does not match");
+        assertEquals(subtaskExpected1.getEndDateTime(), subtaskActual1.getEndDateTime(), "End time does not match");
 
-        assertEquals(subtaskExpected2.getId(), subtaskActual2.getId(), "id не совпадает");
-        assertEquals(subtaskExpected2.getName(), subtaskActual2.getName(), "не совпадает name");
-        assertEquals(subtaskExpected2.getDescription(), subtaskActual2.getDescription(), "не совпадают description");
-        assertEquals(subtaskExpected2.getStatus(), subtaskActual2.getStatus(), "не совпадают status");
-        assertEquals(subtaskExpected2.getStartDateTime(), subtaskActual2.getStartDateTime(), "не совпадает startTime");
-        assertEquals(subtaskExpected2.getDuration(), subtaskActual2.getDuration(), "не совпадает duration");
-        assertEquals(subtaskExpected2.getEndDateTime(), subtaskActual2.getEndDateTime(), "не совпадает endTime");
+        assertEquals(subtaskExpected2.getId(), subtaskActual2.getId(), "IDs do not match");
+        assertEquals(subtaskExpected2.getName(), subtaskActual2.getName(), "Names do not match");
+        assertEquals(subtaskExpected2.getDescription(), subtaskActual2.getDescription(), "Descriptions do not match");
+        assertEquals(subtaskExpected2.getStatus(), subtaskActual2.getStatus(), "Statuses do not match");
+        assertEquals(subtaskExpected2.getStartDateTime(), subtaskActual2.getStartDateTime(), "Start time does not match");
+        assertEquals(subtaskExpected2.getDuration(), subtaskActual2.getDuration(), "Duration does not match");
+        assertEquals(subtaskExpected2.getEndDateTime(), subtaskActual2.getEndDateTime(), "End time does not match");
 
     }
 
     @Test
-    @DisplayName("Должен вернуть подзадачу, когда приходит запрос GET/subtasks/{id}")
+    @DisplayName("Should return a subtask when a GET /subtasks/{id} request is received")
     public void shouldGetSubTaskById_GETSubTaskIdRequestArrives() throws IOException, InterruptedException {
 
         Epic epic = manager.createEpic(new Epic("test name", "test description"));
@@ -461,19 +461,19 @@ class HttpTaskServerTest {
         String responseBody = response.body();
         SubTask subtaskActual = gson.fromJson(responseBody, SubTask.class);
 
-        assertEquals(subtaskExpected.getId(), subtaskActual.getId(), "id не совпадает");
-        assertEquals(subtaskExpected.getName(), subtaskActual.getName(), "не совпадает name");
-        assertEquals(subtaskExpected.getDescription(), subtaskActual.getDescription(), "не совпадают description");
-        assertEquals(subtaskExpected.getStatus(), subtaskActual.getStatus(), "не совпадают status");
-        assertEquals(subtaskExpected.getStartDateTime(), subtaskActual.getStartDateTime(), "не совпадает startTime");
-        assertEquals(subtaskExpected.getDuration(), subtaskActual.getDuration(), "не совпадает duration");
-        assertEquals(subtaskExpected.getEndDateTime(), subtaskActual.getEndDateTime(), "не совпадает endTime");
+        assertEquals(subtaskExpected.getId(), subtaskActual.getId(), "IDs do not match");
+        assertEquals(subtaskExpected.getName(), subtaskActual.getName(), "Names do not match");
+        assertEquals(subtaskExpected.getDescription(), subtaskActual.getDescription(), "Descriptions do not match");
+        assertEquals(subtaskExpected.getStatus(), subtaskActual.getStatus(), "Statuses do not match");
+        assertEquals(subtaskExpected.getStartDateTime(), subtaskActual.getStartDateTime(), "Start time does not match");
+        assertEquals(subtaskExpected.getDuration(), subtaskActual.getDuration(), "Duration does not match");
+        assertEquals(subtaskExpected.getEndDateTime(), subtaskActual.getEndDateTime(), "End time does not match");
 
     }
 
 
     @Test
-    @DisplayName("Должен вернуть код ошибки, когда приходит запрос GET/subtasks/{id} и задача не найдена")
+    @DisplayName("Should return an error code for GET /subtasks/{id} when the subtask does not exist")
     public void shouldReturnErrorCode_GETSubTasksIdRequestArrivesAndSubTaskNotFound() throws IOException, InterruptedException {
 
         Epic epic = manager.createEpic(new Epic("test name", "test description"));
@@ -496,7 +496,7 @@ class HttpTaskServerTest {
     }
 
     @Test
-    @DisplayName("Должен удалить подзадачу, когда приходит запрос DELETE/subtasks/{id}")
+    @DisplayName("Should delete a subtask when a DELETE /subtasks/{id} request is received")
     public void shouldDeleteSubTask_DELETESubTasksIdRequestArrives() throws IOException, InterruptedException {
 
         Epic epic = manager.createEpic(new Epic("test name", "test description"));
@@ -516,13 +516,13 @@ class HttpTaskServerTest {
         assertEquals(204, response.statusCode());
 
         List<SubTask> subtasksFromManager = manager.getSubTasksList();
-        assertEquals(0, subtasksFromManager.size(), "Задача не удалилась, список не пуст");
+        assertEquals(0, subtasksFromManager.size(), "Task was not deleted, the list is not empty");
         assertThrows(NotFoundException.class, () -> manager.getSubTaskById(2),
-                "задача не удалилась, исключение не выброшено");
+                "Task was not deleted, no exception was thrown");
     }
 
     @Test
-    @DisplayName("Должен вернуть код ошибки, когда приходит запрос DELETE/subtasks/{id} и задача не найдена")
+    @DisplayName("Should return an error code for DELETE /subtasks/{id} when the subtask does not exist")
     public void shouldReturnErrorCode_DELETESubTasksIdRequestArrivesAndTaskNotFound() throws IOException, InterruptedException {
 
         Epic epic = manager.createEpic(new Epic("test name", "test description"));
@@ -544,7 +544,7 @@ class HttpTaskServerTest {
     }
 
     @Test
-    @DisplayName("Должен создать эпик, когда приходит запрос POST/epics и у эпика нет id")
+    @DisplayName("Should create an epic when a POST /epics request is received and the epic has no ID")
     public void shouldCreateEpic_POSTEpicsRequestArrivesAndEpicDoesNotHaveId() throws IOException, InterruptedException {
         Epic epicExpected = new Epic("test name", "test description");
 
@@ -565,22 +565,22 @@ class HttpTaskServerTest {
         Epic epicActual = epicsFromManager.getFirst();
 
 
-        assertNotNull(epicsFromManager, "Задачи не возвращаются");
-        assertEquals(1, epicsFromManager.size(), "Некорректное количество задач");
+        assertNotNull(epicsFromManager, "Tasks are not returned");
+        assertEquals(1, epicsFromManager.size(), "Incorrect number of tasks");
 
-        assertNotEquals(epicExpected.getId(), epicActual.getId(), "id не сгенерировано");
-        assertEquals(epicExpected.getName(), epicActual.getName(), "не совпадает name");
-        assertEquals(epicExpected.getDescription(), epicActual.getDescription(), "не совпадают description");
-        assertEquals(Status.NEW, epicActual.getStatus(), "не совпадают status");
+        assertNotEquals(epicExpected.getId(), epicActual.getId(), "ID was not generated");
+        assertEquals(epicExpected.getName(), epicActual.getName(), "Names do not match");
+        assertEquals(epicExpected.getDescription(), epicActual.getDescription(), "Descriptions do not match");
+        assertEquals(Status.NEW, epicActual.getStatus(), "Statuses do not match");
 
-        assertEquals(epicExpected.getStartDateTime(), epicActual.getStartDateTime(), "не совпадает startTime");
-        assertEquals(epicExpected.getDuration(), epicActual.getDuration(), "не совпадает duration");
-        assertEquals(epicExpected.getEndDateTime(), epicActual.getEndDateTime(), "не совпадает endTime");
+        assertEquals(epicExpected.getStartDateTime(), epicActual.getStartDateTime(), "Start time does not match");
+        assertEquals(epicExpected.getDuration(), epicActual.getDuration(), "Duration does not match");
+        assertEquals(epicExpected.getEndDateTime(), epicActual.getEndDateTime(), "End time does not match");
     }
 
 
     @Test
-    @DisplayName("Должен обновить эпик, когда приходит запрос POST/epics и у эпика есть id")
+    @DisplayName("Should update an epic when a POST /epics request is received and the epic has an ID")
     public void shouldUpdateEpic_POSTEpicsRequestArrivesAndEpicHaveId() throws IOException, InterruptedException {
         Epic epicForChange = manager.createEpic(new Epic("test name", "test description"));
 
@@ -604,22 +604,22 @@ class HttpTaskServerTest {
         Epic epicActual = epicsFromManager.getFirst();
 
 
-        assertNotNull(epicsFromManager, "Задачи не возвращаются");
-        assertEquals(1, epicsFromManager.size(), "Некорректное количество задач");
+        assertNotNull(epicsFromManager, "Tasks are not returned");
+        assertEquals(1, epicsFromManager.size(), "Incorrect number of tasks");
 
-        assertEquals(epicExpected.getId(), epicActual.getId(), "id не совпадает");
-        assertEquals(epicExpected.getName(), epicActual.getName(), "не совпадает name");
-        assertEquals(epicExpected.getDescription(), epicActual.getDescription(), "не совпадают description");
-        assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "не совпадают status");
+        assertEquals(epicExpected.getId(), epicActual.getId(), "IDs do not match");
+        assertEquals(epicExpected.getName(), epicActual.getName(), "Names do not match");
+        assertEquals(epicExpected.getDescription(), epicActual.getDescription(), "Descriptions do not match");
+        assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "Statuses do not match");
 
-        assertEquals(epicExpected.getStartDateTime(), epicActual.getStartDateTime(), "не совпадает startTime");
-        assertEquals(epicExpected.getDuration(), epicActual.getDuration(), "не совпадает duration");
-        assertEquals(epicExpected.getEndDateTime(), epicActual.getEndDateTime(), "не совпадает endTime");
+        assertEquals(epicExpected.getStartDateTime(), epicActual.getStartDateTime(), "Start time does not match");
+        assertEquals(epicExpected.getDuration(), epicActual.getDuration(), "Duration does not match");
+        assertEquals(epicExpected.getEndDateTime(), epicActual.getEndDateTime(), "End time does not match");
     }
 
 
     @Test
-    @DisplayName("Должен вернуть список эпиков, когда приходит запрос GET/epics")
+    @DisplayName("Should return a list of epics when a GET /epics request is received")
     public void shouldGetEpicsList_GETEpicsRequestArrives() throws IOException, InterruptedException {
 
         Epic epicExpected1 = manager.createEpic(new Epic("test name", "test description"));
@@ -642,29 +642,29 @@ class HttpTaskServerTest {
         Epic epicActual1 = epicFromManager.getFirst();
         Epic epicActual2 = epicFromManager.getLast();
 
-        assertNotNull(epicFromManager, "Задачи не возвращаются");
-        assertEquals(2, epicFromManager.size(), "Некорректное количество задач");
+        assertNotNull(epicFromManager, "Tasks are not returned");
+        assertEquals(2, epicFromManager.size(), "Incorrect number of tasks");
 
-        assertEquals(epicExpected1.getId(), epicActual1.getId(), "id не совпадает");
-        assertEquals(epicExpected1.getName(), epicActual1.getName(), "не совпадает name");
-        assertEquals(epicExpected1.getDescription(), epicActual1.getDescription(), "не совпадают description");
-        assertEquals(epicExpected1.getStatus(), epicActual1.getStatus(), "не совпадают status");
-        assertEquals(epicExpected1.getStartDateTime(), epicActual1.getStartDateTime(), "не совпадает startTime");
-        assertEquals(epicExpected1.getDuration(), epicActual1.getDuration(), "не совпадает duration");
-        assertEquals(epicExpected1.getEndDateTime(), epicActual1.getEndDateTime(), "не совпадает endTime");
+        assertEquals(epicExpected1.getId(), epicActual1.getId(), "IDs do not match");
+        assertEquals(epicExpected1.getName(), epicActual1.getName(), "Names do not match");
+        assertEquals(epicExpected1.getDescription(), epicActual1.getDescription(), "Descriptions do not match");
+        assertEquals(epicExpected1.getStatus(), epicActual1.getStatus(), "Statuses do not match");
+        assertEquals(epicExpected1.getStartDateTime(), epicActual1.getStartDateTime(), "Start time does not match");
+        assertEquals(epicExpected1.getDuration(), epicActual1.getDuration(), "Duration does not match");
+        assertEquals(epicExpected1.getEndDateTime(), epicActual1.getEndDateTime(), "End time does not match");
 
-        assertEquals(epicExpected2.getId(), epicActual2.getId(), "id не совпадает");
-        assertEquals(epicExpected2.getName(), epicActual2.getName(), "не совпадает name");
-        assertEquals(epicExpected2.getDescription(), epicActual2.getDescription(), "не совпадают description");
-        assertEquals(epicExpected2.getStatus(), epicActual2.getStatus(), "не совпадают status");
-        assertEquals(epicExpected2.getStartDateTime(), epicActual2.getStartDateTime(), "не совпадает startTime");
-        assertEquals(epicExpected2.getDuration(), epicActual2.getDuration(), "не совпадает duration");
-        assertEquals(epicExpected2.getEndDateTime(), epicActual2.getEndDateTime(), "не совпадает endTime");
+        assertEquals(epicExpected2.getId(), epicActual2.getId(), "IDs do not match");
+        assertEquals(epicExpected2.getName(), epicActual2.getName(), "Names do not match");
+        assertEquals(epicExpected2.getDescription(), epicActual2.getDescription(), "Descriptions do not match");
+        assertEquals(epicExpected2.getStatus(), epicActual2.getStatus(), "Statuses do not match");
+        assertEquals(epicExpected2.getStartDateTime(), epicActual2.getStartDateTime(), "Start time does not match");
+        assertEquals(epicExpected2.getDuration(), epicActual2.getDuration(), "Duration does not match");
+        assertEquals(epicExpected2.getEndDateTime(), epicActual2.getEndDateTime(), "End time does not match");
 
     }
 
     @Test
-    @DisplayName("Должен вернуть эпик, когда приходит запрос GET/epics/{id}")
+    @DisplayName("Should return an epic when a GET /epics/{id} request is received")
     public void shouldGetEpicById_GETEpicsIdRequestArrives() throws IOException, InterruptedException {
 
         Epic epicExpected = manager.createEpic(new Epic("test name", "test description"));
@@ -684,19 +684,19 @@ class HttpTaskServerTest {
         String responseBody = response.body();
         Epic epicActual = gson.fromJson(responseBody, Epic.class);
 
-        assertEquals(epicExpected.getId(), epicActual.getId(), "id не совпадает");
-        assertEquals(epicExpected.getName(), epicActual.getName(), "не совпадает name");
-        assertEquals(epicExpected.getDescription(), epicActual.getDescription(), "не совпадают description");
-        assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "не совпадают status");
-        assertEquals(epicExpected.getStartDateTime(), epicActual.getStartDateTime(), "не совпадает startTime");
-        assertEquals(epicExpected.getDuration(), epicActual.getDuration(), "не совпадает duration");
-        assertEquals(epicExpected.getEndDateTime(), epicActual.getEndDateTime(), "не совпадает endTime");
+        assertEquals(epicExpected.getId(), epicActual.getId(), "IDs do not match");
+        assertEquals(epicExpected.getName(), epicActual.getName(), "Names do not match");
+        assertEquals(epicExpected.getDescription(), epicActual.getDescription(), "Descriptions do not match");
+        assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "Statuses do not match");
+        assertEquals(epicExpected.getStartDateTime(), epicActual.getStartDateTime(), "Start time does not match");
+        assertEquals(epicExpected.getDuration(), epicActual.getDuration(), "Duration does not match");
+        assertEquals(epicExpected.getEndDateTime(), epicActual.getEndDateTime(), "End time does not match");
 
     }
 
 
     @Test
-    @DisplayName("Должен вернуть код ошибки, когда приходит запрос GET/epics/{id} и задача не найдена")
+    @DisplayName("Should return an error code for GET /epics/{id} when the epic does not exist")
     public void shouldReturnErrorCode_GETEpicsIdRequestArrivesAndEpicNotFound() throws IOException, InterruptedException {
 
         Epic epic = manager.createEpic(new Epic("test name", "test description"));
@@ -718,7 +718,7 @@ class HttpTaskServerTest {
 
 
     @Test
-    @DisplayName("Должен вернуть список подзадач эпика по его id, когда приходит запрос GET/epics/{id}/subtasks")
+    @DisplayName("Should return the list of an epic’s subtasks by its ID when a GET /epics/{id}/subtasks request is received")
     public void shouldGetEpicsSubTasks_GETSubTasksRequestArrives() throws IOException, InterruptedException {
 
         Epic epic = manager.createEpic(new Epic("test name", "test description"));
@@ -746,29 +746,29 @@ class HttpTaskServerTest {
         SubTask subtaskActual1 = subtasksFromManager.getFirst();
         SubTask subtaskActual2 = subtasksFromManager.getLast();
 
-        assertNotNull(subtasksFromManager, "Задачи не возвращаются");
-        assertEquals(2, subtasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(subtasksFromManager, "Tasks are not returned");
+        assertEquals(2, subtasksFromManager.size(), "Incorrect number of tasks");
 
-        assertEquals(subtaskExpected1.getId(), subtaskActual1.getId(), "id не совпадает");
-        assertEquals(subtaskExpected1.getName(), subtaskActual1.getName(), "не совпадает name");
-        assertEquals(subtaskExpected1.getDescription(), subtaskActual1.getDescription(), "не совпадают description");
-        assertEquals(subtaskExpected1.getStatus(), subtaskActual1.getStatus(), "не совпадают status");
-        assertEquals(subtaskExpected1.getStartDateTime(), subtaskActual1.getStartDateTime(), "не совпадает startTime");
-        assertEquals(subtaskExpected1.getDuration(), subtaskActual1.getDuration(), "не совпадает duration");
-        assertEquals(subtaskExpected1.getEndDateTime(), subtaskActual1.getEndDateTime(), "не совпадает endTime");
+        assertEquals(subtaskExpected1.getId(), subtaskActual1.getId(), "IDs do not match");
+        assertEquals(subtaskExpected1.getName(), subtaskActual1.getName(), "Names do not match");
+        assertEquals(subtaskExpected1.getDescription(), subtaskActual1.getDescription(), "Descriptions do not match");
+        assertEquals(subtaskExpected1.getStatus(), subtaskActual1.getStatus(), "Statuses do not match");
+        assertEquals(subtaskExpected1.getStartDateTime(), subtaskActual1.getStartDateTime(), "Start time does not match");
+        assertEquals(subtaskExpected1.getDuration(), subtaskActual1.getDuration(), "Duration does not match");
+        assertEquals(subtaskExpected1.getEndDateTime(), subtaskActual1.getEndDateTime(), "End time does not match");
 
-        assertEquals(subtaskExpected2.getId(), subtaskActual2.getId(), "id не совпадает");
-        assertEquals(subtaskExpected2.getName(), subtaskActual2.getName(), "не совпадает name");
-        assertEquals(subtaskExpected2.getDescription(), subtaskActual2.getDescription(), "не совпадают description");
-        assertEquals(subtaskExpected2.getStatus(), subtaskActual2.getStatus(), "не совпадают status");
-        assertEquals(subtaskExpected2.getStartDateTime(), subtaskActual2.getStartDateTime(), "не совпадает startTime");
-        assertEquals(subtaskExpected2.getDuration(), subtaskActual2.getDuration(), "не совпадает duration");
-        assertEquals(subtaskExpected2.getEndDateTime(), subtaskActual2.getEndDateTime(), "не совпадает endTime");
+        assertEquals(subtaskExpected2.getId(), subtaskActual2.getId(), "IDs do not match");
+        assertEquals(subtaskExpected2.getName(), subtaskActual2.getName(), "Names do not match");
+        assertEquals(subtaskExpected2.getDescription(), subtaskActual2.getDescription(), "Descriptions do not match");
+        assertEquals(subtaskExpected2.getStatus(), subtaskActual2.getStatus(), "Statuses do not match");
+        assertEquals(subtaskExpected2.getStartDateTime(), subtaskActual2.getStartDateTime(), "Start time does not match");
+        assertEquals(subtaskExpected2.getDuration(), subtaskActual2.getDuration(), "Duration does not match");
+        assertEquals(subtaskExpected2.getEndDateTime(), subtaskActual2.getEndDateTime(), "End time does not match");
 
     }
 
     @Test
-    @DisplayName("Должен вернуть код ошибки, когда приходит запрос GET/epics/{id}/subtasks и задача не найдена")
+    @DisplayName("Should return an error code for GET /epics/{id}/subtasks when the epic does not exist")
     public void shouldReturnErrorCode_GETEpicsIdSubTasksRequestArrivesAndEpicNotFound() throws IOException, InterruptedException {
 
         Epic epic = manager.createEpic(new Epic("test name", "test description"));
@@ -790,7 +790,7 @@ class HttpTaskServerTest {
 
 
     @Test
-    @DisplayName("Должен удалить эпик, когда приходит запрос DELETE/epics/{id}")
+    @DisplayName("Should delete an epic when a DELETE /epics/{id} request is received")
     public void shouldDeleteEpic_DELETEEpicsIdRequestArrives() throws IOException, InterruptedException {
 
         Epic epicExpected = manager.createEpic(new Epic("test name", "test description"));
@@ -807,13 +807,13 @@ class HttpTaskServerTest {
         assertEquals(204, response.statusCode());
 
         List<Epic> epicsFromManager = manager.getEpicList();
-        assertEquals(0, epicsFromManager.size(), "Задача не удалилась, список не пуст");
+        assertEquals(0, epicsFromManager.size(), "Task was not deleted, the list is not empty");
         assertThrows(NotFoundException.class, () -> manager.getEpicById(1),
-                "задача не удалилась, исключение не выброшено");
+                "Task was not deleted, no exception was thrown");
     }
 
     @Test
-    @DisplayName("Должен вернуть код ошибки, когда приходит запрос DELETE/epics/{id} и эпик не найден")
+    @DisplayName("Should return an error code for DELETE /epics/{id} when the epic does not exist")
     public void shouldReturnErrorCode_DELETEEpicsIdRequestArrivesAndEpicNotFound() throws IOException, InterruptedException {
 
         Epic epic = manager.createEpic(new Epic("test name", "test description"));
@@ -834,7 +834,7 @@ class HttpTaskServerTest {
 
 
     @Test
-    @DisplayName("Должен вернуть лист с историей, когда приходит запрос GET/history")
+    @DisplayName("Should return the history list when a GET /history request is received")
     public void shouldGetHistoryList_GETHistoryRequestArrives() throws IOException, InterruptedException {
 
         Epic epic = manager.createEpic(new Epic("test EPIC name", "test EPIC description"));
@@ -863,24 +863,24 @@ class HttpTaskServerTest {
         List<Task> historyExpected = manager.getHistory();
 
 
-        assertEquals(historyExpected.size(), historyActual.size(), "списки разного размера");
+        assertEquals(historyExpected.size(), historyActual.size(), "Lists have different sizes");
 
         for (Task taskExpected : historyExpected) {
             Task taskActual = historyActual.get(historyExpected.indexOf(taskExpected));
 
-            assertEquals(taskExpected.getId(), taskActual.getId(), "не совпадают id");
-            assertEquals(taskExpected.getName(), taskActual.getName(), "не совпадает name");
+            assertEquals(taskExpected.getId(), taskActual.getId(), "IDs do not match");
+            assertEquals(taskExpected.getName(), taskActual.getName(), "Names do not match");
             assertEquals(taskExpected.getDescription(), taskActual.getDescription(),
-                    "не совпадают description");
-            assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
-            assertEquals(taskExpected.getStartDateTime(), taskActual.getStartDateTime(), "не совпадает startTime");
-            assertEquals(taskExpected.getDuration(), taskActual.getDuration(), "не совпадает duration");
-            assertEquals(taskExpected.getEndDateTime(), taskActual.getEndDateTime(), "не совпадает endTime");
+                    "Descriptions do not match");
+            assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "Statuses do not match");
+            assertEquals(taskExpected.getStartDateTime(), taskActual.getStartDateTime(), "Start time does not match");
+            assertEquals(taskExpected.getDuration(), taskActual.getDuration(), "Duration does not match");
+            assertEquals(taskExpected.getEndDateTime(), taskActual.getEndDateTime(), "End time does not match");
         }
     }
 
     @Test
-    @DisplayName("Должен вернуть лист с приоритетными задачами, когда приходит запрос GET/prioritized")
+    @DisplayName("Should return the prioritized task list when a GET /prioritized request is received")
     public void shouldGetPrioritizedList_GETPrioritizedRequestArrives() throws IOException, InterruptedException {
 
         Epic epic = manager.createEpic(new Epic("test EPIC name", "test EPIC description"));
@@ -908,19 +908,19 @@ class HttpTaskServerTest {
         List<Task> prioritizedExpected = manager.getPrioritizedTasks();
 
 
-        assertEquals(prioritizedExpected.size(), prioritizedActual.size(), "списки разного размера");
+        assertEquals(prioritizedExpected.size(), prioritizedActual.size(), "Lists have different sizes");
 
         for (Task taskExpected : prioritizedExpected) {
             Task taskActual = prioritizedActual.get(prioritizedExpected.indexOf(taskExpected));
 
-            assertEquals(taskExpected.getId(), taskActual.getId(), "не совпадают id");
-            assertEquals(taskExpected.getName(), taskActual.getName(), "не совпадает name");
+            assertEquals(taskExpected.getId(), taskActual.getId(), "IDs do not match");
+            assertEquals(taskExpected.getName(), taskActual.getName(), "Names do not match");
             assertEquals(taskExpected.getDescription(), taskActual.getDescription(),
-                    "не совпадают description");
-            assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
-            assertEquals(taskExpected.getStartDateTime(), taskActual.getStartDateTime(), "не совпадает startTime");
-            assertEquals(taskExpected.getDuration(), taskActual.getDuration(), "не совпадает duration");
-            assertEquals(taskExpected.getEndDateTime(), taskActual.getEndDateTime(), "не совпадает endTime");
+                    "Descriptions do not match");
+            assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "Statuses do not match");
+            assertEquals(taskExpected.getStartDateTime(), taskActual.getStartDateTime(), "Start time does not match");
+            assertEquals(taskExpected.getDuration(), taskActual.getDuration(), "Duration does not match");
+            assertEquals(taskExpected.getEndDateTime(), taskActual.getEndDateTime(), "End time does not match");
         }
     }
 

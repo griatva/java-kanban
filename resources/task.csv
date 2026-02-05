@@ -1,6 +1,7 @@
 id,type,name,status,description,epicId,startDateTime,duration
-1,EPIC,name,IN_PROGRESS,description,null,2024-06-19T12:00,PT1H30M
-2,EPIC,name,IN_PROGRESS,description,null,2024-06-19T20:17,PT1H
-3,SUBTASK,Название подзадачи-1,IN_PROGRESS,описание-1,2,2024-06-19T20:17,PT1H
-4,SUBTASK,Название подзадачи-1,IN_PROGRESS,описание-1,1,2024-06-19T14:17,PT1H
-5,SUBTASK,Название подзадачи-2,IN_PROGRESS,описание-2,1,2024-06-19T12:00,PT30M
+1,TASK,task name-1,IN_PROGRESS,description-1,null,2024-06-20T12:25,PT1H
+2,TASK,task name-2,NEW,description-2,null,2024-06-20T14:25,PT1H
+5,EPIC,epic-2,IN_PROGRESS,epic description-2,null,2024-06-18T14:17,PT2H30M
+8,SUBTASK,subtask name-3,NEW,description-3,5,2024-06-19T20:17,PT1H
+9,SUBTASK,subtask name-4,IN_PROGRESS,description-4,5,2024-06-18T14:17,PT30M
+10,SUBTASK,subtask name-5,IN_PROGRESS,description-5,5,2024-06-19T14:17,PT1H
