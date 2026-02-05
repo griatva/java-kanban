@@ -5,23 +5,23 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Эпик")
+@DisplayName("Epic")
 class EpicTest {
 
     @Test
-    @DisplayName("Два эпика с одинаковым ID должны быть равны")
+    @DisplayName("Two epics with the same ID should be equal")
     void equals_returnTrue_objectHaveSameId() {
 
         //given
-        Epic epicExpected = new Epic("Имя-1", "Описание-1");
+        Epic epicExpected = new Epic("Name-1", "description-1");
         epicExpected.setStatus(Status.NEW);
         epicExpected.setId(1);
 
-        Epic epicActual = new Epic("Имя-2", "Описание-2");
+        Epic epicActual = new Epic("Name-2", "description-2");
         epicActual.setStatus(Status.DONE);
         epicActual.setId(1);
 
         //when,then
-        assertEquals(epicExpected, epicActual, "Эпики не равны");
+        assertEquals(epicExpected, epicActual, "Epics are not equal");
     }
 }

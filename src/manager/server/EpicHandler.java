@@ -50,13 +50,13 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                         break;
                     }
                     case UNKNOWN:
-                        String message = "Несуществующий запрос";
+                        String message = "Non-existent request";
                         writeResponse(exchange, gson.toJson(message), 400);
                         break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                String message = "Непредвиденная ошибка";
+                String message = "Unexpected error";
                 writeResponse(exchange, gson.toJson(message), 500);
             }
 
@@ -96,7 +96,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
             Epic epic = gson.fromJson(requestBody, Epic.class);
 
             manager.updateEpic(epic);
-            String message = "Эпик успешно обновлен";
+            String message = "Epic successfully updated";
             writeResponse(exchange, gson.toJson(message), 201);
 
         }

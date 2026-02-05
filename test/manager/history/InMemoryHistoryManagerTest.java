@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 class InMemoryHistoryManagerTest {
 
     @Test
-    @DisplayName("При добавлении задачи должен удалять повтор данной задачи из истории")
+    @DisplayName("Adding a task should remove its duplicate from the history")
     void addTaskInHistory_deleteTheSameTaskFromHistory_addTaskInHistory() {
 
         //given
@@ -36,13 +36,13 @@ class InMemoryHistoryManagerTest {
         List<Task> history = inMemoryHistoryManager.getHistory();
 
         //then
-        assertEquals(3, history.size(), "задач в листе больше, чем должно быть");
-        assertNotEquals(task, history.getFirst(), "повтор не удалился");
+        assertEquals(3, history.size(), "There are more tasks in the list than expected");
+        assertNotEquals(task, history.getFirst(), "Failed to remove duplicate");
 
     }
 
     @Test
-    @DisplayName("Должен добавлять задачу в конец списка")
+    @DisplayName("Should add the task to the end of the list")
     void addTaskInHistory_addTaskToEndOfList() {
         //given
         InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
@@ -65,15 +65,15 @@ class InMemoryHistoryManagerTest {
         SubTask subTaskActual = (SubTask) history.getLast();
 
         //then
-        assertEquals(subTaskExpected.getId(), subTaskActual.getId(), "не совпадают id");
-        assertEquals(subTaskExpected.getName(), subTaskActual.getName(), "не совпадает name");
-        assertEquals(subTaskExpected.getDescription(), subTaskActual.getDescription(), "не совпадают description");
-        assertEquals(subTaskExpected.getStatus(), subTaskActual.getStatus(), "не совпадают status");
-        assertEquals(subTaskExpected.getEpicId(), subTaskActual.getEpicId(), "не совпадают epicId");
+        assertEquals(subTaskExpected.getId(), subTaskActual.getId(), "IDs do not match");
+        assertEquals(subTaskExpected.getName(), subTaskActual.getName(), "Names do not match");
+        assertEquals(subTaskExpected.getDescription(), subTaskActual.getDescription(), "Descriptions do not match");
+        assertEquals(subTaskExpected.getStatus(), subTaskActual.getStatus(), "Statuses do not match");
+        assertEquals(subTaskExpected.getEpicId(), subTaskActual.getEpicId(), "Epic IDs do not match");
     }
 
     @Test
-    @DisplayName("Должен возвращать список просмотра задач в порядке их добавления")
+    @DisplayName("Should return the task viewing history in the order they were added")
     void getHistory_returnHistoryListInOrderTheyWereAdded() {
         //given
         InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
@@ -96,25 +96,26 @@ class InMemoryHistoryManagerTest {
         SubTask subTaskActual = (SubTask) history.getLast();
 
         //then
-        assertEquals(taskExpected.getId(), taskActual.getId(), "не совпадают id");
-        assertEquals(taskExpected.getName(), taskActual.getName(), "не совпадает name");
-        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "не совпадают description");
-        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
+        assertEquals(taskExpected.getId(), taskActual.getId(), "IDs do not match");
+        assertEquals(taskExpected.getName(), taskActual.getName(), "Names do not match");
+        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "Descriptions do not match");
+        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "Statuses do not match");
 
-        assertEquals(epicExpected.getId(), epicActual.getId(), "не совпадают id");
-        assertEquals(epicExpected.getName(), epicActual.getName(), "не совпадает name");
-        assertEquals(epicExpected.getDescription(), epicActual.getDescription(), "не совпадают description");
-        assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "не совпадают status");
+        assertEquals(epicExpected.getId(), epicActual.getId(), "IDs do not match");
+        assertEquals(epicExpected.getName(), epicActual.getName(), "Names do not match");
+        assertEquals(epicExpected.getDescription(), epicActual.getDescription(), "Descriptions do not match");
+        assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "Statuses do not match");
 
-        assertEquals(subTaskExpected.getId(), subTaskActual.getId(), "не совпадают id");
-        assertEquals(subTaskExpected.getName(), subTaskActual.getName(), "не совпадает name");
-        assertEquals(subTaskExpected.getDescription(), subTaskActual.getDescription(), "не совпадают description");
-        assertEquals(subTaskExpected.getStatus(), subTaskActual.getStatus(), "не совпадают status");
-        assertEquals(subTaskExpected.getEpicId(), subTaskActual.getEpicId(), "не совпадают epicId");
+        assertEquals(subTaskExpected.getId(), subTaskActual.getId(), "IDs do not match");
+        assertEquals(subTaskExpected.getName(), subTaskActual.getName(), "Names do not match");
+        assertEquals(subTaskExpected.getDescription(), subTaskActual.getDescription(), "Descriptions do not match");
+        assertEquals(subTaskExpected.getStatus(), subTaskActual.getStatus(), "Statuses do not match");
+        assertEquals(subTaskExpected.getEpicId(), subTaskActual.getEpicId(), "Epic IDs do not match");
+
     }
 
     @Test
-    @DisplayName("Должен удалить задачу из истории по Id, сохранив упорядоченность списка")
+    @DisplayName("Should remove a task from the history by ID while preserving the list order")
     void remove_deleteTaskFromHistoryByIdAndSaveOrderOfTasksInList() {
 
         //given
@@ -143,22 +144,23 @@ class InMemoryHistoryManagerTest {
         SubTask subTaskActual = (SubTask) history.getLast();
 
         //then
-        assertEquals(3, history.size(), "задача не удалилась");
+        assertEquals(3, history.size(), "Task was not removed");
 
-        assertEquals(taskExpected.getId(), taskActual.getId(), "не совпадают id");
-        assertEquals(taskExpected.getName(), taskActual.getName(), "не совпадает name");
-        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "не совпадают description");
-        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
+        assertEquals(taskExpected.getId(), taskActual.getId(), "IDs do not match");
+        assertEquals(taskExpected.getName(), taskActual.getName(), "Names do not match");
+        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "Descriptions do not match");
+        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "Statuses do not match");
 
-        assertEquals(epicExpected.getId(), epicActual.getId(), "не совпадают id");
-        assertEquals(epicExpected.getName(), epicActual.getName(), "не совпадает name");
-        assertEquals(epicExpected.getDescription(), epicActual.getDescription(), "не совпадают description");
-        assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "не совпадают status");
+        assertEquals(epicExpected.getId(), epicActual.getId(), "IDs do not match");
+        assertEquals(epicExpected.getName(), epicActual.getName(), "Names do not match");
+        assertEquals(epicExpected.getDescription(), epicActual.getDescription(), "Descriptions do not match");
+        assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "Statuses do not match");
 
-        assertEquals(subTaskExpected.getId(), subTaskActual.getId(), "не совпадают id");
-        assertEquals(subTaskExpected.getName(), subTaskActual.getName(), "не совпадает name");
-        assertEquals(subTaskExpected.getDescription(), subTaskActual.getDescription(), "не совпадают description");
-        assertEquals(subTaskExpected.getStatus(), subTaskActual.getStatus(), "не совпадают status");
-        assertEquals(subTaskExpected.getEpicId(), subTaskActual.getEpicId(), "не совпадают epicId");
+        assertEquals(subTaskExpected.getId(), subTaskActual.getId(), "IDs do not match");
+        assertEquals(subTaskExpected.getName(), subTaskActual.getName(), "Names do not match");
+        assertEquals(subTaskExpected.getDescription(), subTaskActual.getDescription(), "Descriptions do not match");
+        assertEquals(subTaskExpected.getStatus(), subTaskActual.getStatus(), "Statuses do not match");
+        assertEquals(subTaskExpected.getEpicId(), subTaskActual.getEpicId(), "Epic IDs do not match");
+
     }
 }

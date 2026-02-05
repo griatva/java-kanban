@@ -5,22 +5,22 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Подзадача")
+@DisplayName("Subtask")
 class SubTaskTest {
 
     @Test
-    @DisplayName("Две подзадачи с одинаковым ID должны быть равны")
+    @DisplayName("Two subtasks with the same ID should be equal")
     void equals_returnTrue_objectHaveSameId() {
 
         //given
 
-        SubTask subTaskExpected = new SubTask("Имя-1", "Описание-1", Status.NEW, 2);
+        SubTask subTaskExpected = new SubTask("Name-1", "description-1", Status.NEW, 2);
         subTaskExpected.setId(1);
 
-        SubTask subTaskActual = new SubTask("Имя-2", "Описание-2", Status.DONE, 3);
+        SubTask subTaskActual = new SubTask("Name-2", "description-2", Status.DONE, 3);
         subTaskActual.setId(1);
 
         //when,then
-        assertEquals(subTaskExpected, subTaskActual, "Задачи не равны");
+        assertEquals(subTaskExpected, subTaskActual, "Subtasks are not equal");
     }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("Менеджер из файла")
+@DisplayName("File Backed Task Manager")
 class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
 
     File fileForRecovery = new File("resources/task.csv");
@@ -32,17 +32,17 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
     }
 
     @Test
-    @DisplayName("Возвращает новый восстановленный менеджер на основе данных из файла")
+    @DisplayName("Returns a new restored manager based on data from the file")
     void loadFromFile_returnsNewRestoredManagerBasedOnFile() {
 
         //given
         Task task = manager.createTask(new Task("name1", "description1", Status.DONE,
-                LocalDateTime.of(2024, 06, 18, 13, 17), Duration.ofMinutes(40)));
+                LocalDateTime.of(2024, 6, 18, 13, 17), Duration.ofMinutes(40)));
 
         Epic epic = manager.createEpic(new Epic("name2", "description2"));
 
         SubTask subtask = manager.createSubTask(new SubTask("name3", Status.IN_PROGRESS, "description3",
-                epic.getId(), LocalDateTime.of(2024, 06, 19, 14, 30), Duration.ofMinutes(60)));
+                epic.getId(), LocalDateTime.of(2024, 6, 19, 14, 30), Duration.ofMinutes(60)));
 
         FileBackedTaskManager managerExpected = (FileBackedTaskManager) manager;
 
@@ -62,91 +62,91 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
 
 
         Task task4 = managerActual.createTask(new Task("name4", "description4", Status.NEW,
-                LocalDateTime.of(2024, 06, 20, 13, 00), Duration.ofMinutes(30)));
+                LocalDateTime.of(2024, 6, 20, 13, 0), Duration.ofMinutes(30)));
 
         //then
-        assertEquals(taskListExpected.size(), taskListActual.size(), "списки разного размера");
+        assertEquals(taskListExpected.size(), taskListActual.size(), "Lists have different sizes");
 
         for (Task taskExpected : taskListExpected) {
             Task taskActual = taskListActual.get(taskListExpected.indexOf(taskExpected));
 
-            assertEquals(taskExpected.getId(), taskActual.getId(), "не совпадают id");
-            assertEquals(taskExpected.getName(), taskActual.getName(), "не совпадает name");
+            assertEquals(taskExpected.getId(), taskActual.getId(), "IDs do not match");
+            assertEquals(taskExpected.getName(), taskActual.getName(), "Names do not match");
             assertEquals(taskExpected.getDescription(), taskActual.getDescription(),
-                    "не совпадают description");
-            assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
-            assertEquals(taskExpected.getType(), taskActual.getType(), "не совпадают type");
-            assertEquals(taskExpected.getStartDateTime(), taskActual.getStartDateTime(), "не совпадает startTime");
-            assertEquals(taskExpected.getDuration(), taskActual.getDuration(), "не совпадает duration");
-            assertEquals(taskExpected.getEndDateTime(), taskActual.getEndDateTime(), "не совпадает endTime");
+                    "Descriptions do not match");
+            assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "Statuses do not match");
+            assertEquals(taskExpected.getType(), taskActual.getType(), "Types do not match");
+            assertEquals(taskExpected.getStartDateTime(), taskActual.getStartDateTime(), "Start time does not match");
+            assertEquals(taskExpected.getDuration(), taskActual.getDuration(), "Duration does not match");
+            assertEquals(taskExpected.getEndDateTime(), taskActual.getEndDateTime(), "End time does not match");
         }
 
-        assertEquals(epicListExpected.size(), epicListActual.size(), "списки разного размера");
+        assertEquals(epicListExpected.size(), epicListActual.size(), "Lists have different sizes");
 
         for (Epic epicExpected : epicListExpected) {
             Epic epicActual = epicListActual.get(epicListExpected.indexOf(epicExpected));
 
-            assertEquals(epicExpected.getId(), epicActual.getId(), "не совпадают id");
-            assertEquals(epicExpected.getName(), epicActual.getName(), "не совпадает name");
+            assertEquals(epicExpected.getId(), epicActual.getId(), "IDs do not match");
+            assertEquals(epicExpected.getName(), epicActual.getName(), "Names do not match");
             assertEquals(epicExpected.getDescription(), epicActual.getDescription(),
-                    "не совпадают description");
-            assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "не совпадают status");
-            assertEquals(epicExpected.getType(), epicActual.getType(), "не совпадают type");
-            assertEquals(epicExpected.getStartDateTime(), epicActual.getStartDateTime(), "не совпадает startTime");
-            assertEquals(epicExpected.getDuration(), epicActual.getDuration(), "не совпадает duration");
-            assertEquals(epicExpected.getEndDateTime(), epicActual.getEndDateTime(), "не совпадает endTime");
+                    "Descriptions do not match");
+            assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "Statuses do not match");
+            assertEquals(epicExpected.getType(), epicActual.getType(), "Types do not match");
+            assertEquals(epicExpected.getStartDateTime(), epicActual.getStartDateTime(), "Start time does not match");
+            assertEquals(epicExpected.getDuration(), epicActual.getDuration(), "Duration does not match");
+            assertEquals(epicExpected.getEndDateTime(), epicActual.getEndDateTime(), "End time does not match");
 
             List<Integer> subTasksIdExpected = epicExpected.getSubTasksId();
             List<Integer> subTasksIdActual = epicActual.getSubTasksId();
             assertEquals(subTasksIdExpected.size(), subTasksIdActual.size(),
-                    "не совпадает количество подзадач в списке эпика");
+                    "The number of subtasks in the epic list does not match");
             assertEquals(subTasksIdExpected.getFirst(), subTasksIdActual.getFirst(),
-                    "не совпадают id подзадач");
+                    "Subtasks' IDs do not match");
         }
 
-        assertEquals(subTaskListExpected.size(), subTaskListActual.size(), "списки разного размера");
+        assertEquals(subTaskListExpected.size(), subTaskListActual.size(), "Lists have different sizes");
 
         for (SubTask subTaskExpected : subTaskListExpected) {
             SubTask subTaskActual = subTaskListActual.get(subTaskListExpected.indexOf(subTaskExpected));
 
-            assertEquals(subTaskExpected.getId(), subTaskActual.getId(), "не совпадают id");
-            assertEquals(subTaskExpected.getName(), subTaskActual.getName(), "не совпадает name");
+            assertEquals(subTaskExpected.getId(), subTaskActual.getId(), "IDs do not match");
+            assertEquals(subTaskExpected.getName(), subTaskActual.getName(), "Names do not match");
             assertEquals(subTaskExpected.getDescription(), subTaskActual.getDescription(),
-                    "не совпадают description");
-            assertEquals(subTaskExpected.getStatus(), subTaskActual.getStatus(), "не совпадают status");
-            assertEquals(subTaskExpected.getEpicId(), subTaskActual.getEpicId(), "не совпадают epicId");
-            assertEquals(subTaskExpected.getType(), subTaskActual.getType(), "не совпадают type");
-            assertEquals(subTaskExpected.getStartDateTime(), subTaskActual.getStartDateTime(), "не совпадает startTime");
-            assertEquals(subTaskExpected.getDuration(), subTaskActual.getDuration(), "не совпадает duration");
-            assertEquals(subTaskExpected.getEndDateTime(), subTaskActual.getEndDateTime(), "не совпадает endTime");
+                    "Descriptions do not match");
+            assertEquals(subTaskExpected.getStatus(), subTaskActual.getStatus(), "Statuses do not match");
+            assertEquals(subTaskExpected.getEpicId(), subTaskActual.getEpicId(), "Epic' IDs do not match");
+            assertEquals(subTaskExpected.getType(), subTaskActual.getType(), "Types do not match");
+            assertEquals(subTaskExpected.getStartDateTime(), subTaskActual.getStartDateTime(), "Start time does not match");
+            assertEquals(subTaskExpected.getDuration(), subTaskActual.getDuration(), "Duration does not match");
+            assertEquals(subTaskExpected.getEndDateTime(), subTaskActual.getEndDateTime(), "End time does not match");
         }
 
-        assertEquals(prioritizedTasksExpected.size(), prioritizedTasksActual.size(), "списки разного размера");
+        assertEquals(prioritizedTasksExpected.size(), prioritizedTasksActual.size(), "Lists have different sizes");
 
         for (Task ptExpected : prioritizedTasksExpected) {
             Task ptActual = prioritizedTasksActual.get(prioritizedTasksExpected.indexOf(ptExpected));
 
-            assertEquals(ptExpected.getId(), ptActual.getId(), "не совпадают id");
-            assertEquals(ptExpected.getName(), ptActual.getName(), "не совпадает name");
+            assertEquals(ptExpected.getId(), ptActual.getId(), "IDs do not match");
+            assertEquals(ptExpected.getName(), ptActual.getName(), "Names do not match");
             assertEquals(ptExpected.getDescription(), ptActual.getDescription(),
-                    "не совпадают description");
-            assertEquals(ptExpected.getStatus(), ptActual.getStatus(), "не совпадают status");
-            assertEquals(ptExpected.getType(), ptActual.getType(), "не совпадают type");
-            assertEquals(ptExpected.getStartDateTime(), ptActual.getStartDateTime(), "не совпадает startTime");
-            assertEquals(ptExpected.getDuration(), ptActual.getDuration(), "не совпадает duration");
-            assertEquals(ptExpected.getEndDateTime(), ptActual.getEndDateTime(), "не совпадает endTime");
+                    "Descriptions do not match");
+            assertEquals(ptExpected.getStatus(), ptActual.getStatus(), "Statuses do not match");
+            assertEquals(ptExpected.getType(), ptActual.getType(), "Types do not match");
+            assertEquals(ptExpected.getStartDateTime(), ptActual.getStartDateTime(), "Start time does not match");
+            assertEquals(ptExpected.getDuration(), ptActual.getDuration(), "Duration does not match");
+            assertEquals(ptExpected.getEndDateTime(), ptActual.getEndDateTime(), "End time does not match");
         }
 
-        assertEquals(4, task4.getId(), "Счетчик не восстановился");
+        assertEquals(4, task4.getId(), "The counter was not restored");
     }
 
 
     @Test
-    @DisplayName("Должен добавить задачу в файл")
+    @DisplayName("Should add a task to the file")
     void createTask_addsTaskToFile() {
 
         //when
-        Task taskExpected = manager.createTask(new Task("название задачи", "описание", Status.DONE,
+        Task taskExpected = manager.createTask(new Task("Task's name", "description", Status.DONE,
                 LocalDateTime.of(2024, 6, 18, 13, 17), Duration.ofMinutes(60)));
 
 
@@ -155,20 +155,20 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
         Task taskActual = list.getFirst();
 
         //then
-        assertEquals(taskExpected.getId(), taskActual.getId(), "не совпадают id");
-        assertEquals(taskExpected.getName(), taskActual.getName(), "не совпадает name");
-        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "не совпадают description");
-        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
-        assertEquals(taskExpected.getType(), taskActual.getType(), "не совпадают type");
+        assertEquals(taskExpected.getId(), taskActual.getId(), "IDs do not match");
+        assertEquals(taskExpected.getName(), taskActual.getName(), "Names do not match");
+        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "Descriptions do not match");
+        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "Statuses do not match");
+        assertEquals(taskExpected.getType(), taskActual.getType(), "Types do not match");
 
     }
 
     @Test
-    @DisplayName("Должен добавить подзадачу в файл")
+    @DisplayName("Should add a subtask to the file")
     void createSubTask_addsSubTaskToFile() {
         //when
         Epic epic = manager.createEpic(new Epic("name", "description"));
-        SubTask subTaskExpected = manager.createSubTask(new SubTask("Название подзадачи", Status.IN_PROGRESS, "описание",
+        SubTask subTaskExpected = manager.createSubTask(new SubTask("Subtask's name", Status.IN_PROGRESS, "description",
                 epic.getId(), LocalDateTime.of(2024, 6, 19, 14, 17), Duration.ofMinutes(60)));
 
 
@@ -177,18 +177,18 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
         SubTask subTaskActual = list.getFirst();
 
         //then
-        assertEquals(subTaskExpected.getId(), subTaskActual.getId(), "не совпадают id");
-        assertEquals(subTaskExpected.getName(), subTaskActual.getName(), "не совпадает name");
+        assertEquals(subTaskExpected.getId(), subTaskActual.getId(), "IDs do not match");
+        assertEquals(subTaskExpected.getName(), subTaskActual.getName(), "Names do not match");
         assertEquals(subTaskExpected.getDescription(), subTaskActual.getDescription(),
-                "не совпадают description");
-        assertEquals(subTaskExpected.getStatus(), subTaskActual.getStatus(), "не совпадают status");
-        assertEquals(subTaskExpected.getEpicId(), subTaskActual.getEpicId(), "не совпадают epicId");
-        assertEquals(subTaskExpected.getType(), subTaskActual.getType(), "не совпадают type");
+                "Descriptions do not match");
+        assertEquals(subTaskExpected.getStatus(), subTaskActual.getStatus(), "Statuses do not match");
+        assertEquals(subTaskExpected.getEpicId(), subTaskActual.getEpicId(), "Epic' IDs do not match");
+        assertEquals(subTaskExpected.getType(), subTaskActual.getType(), "Types do not match");
 
     }
 
     @Test
-    @DisplayName("Должен добавить подзадачу в файл")
+    @DisplayName("Should add a Epic to the file")
     void createEpic_addsEpicToFile() {
         //when
         Epic epicExpected = manager.createEpic(new Epic("name", "description"));
@@ -199,27 +199,27 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
         Epic epicActual = list.getFirst();
 
         //then
-        assertEquals(epicExpected.getId(), epicActual.getId(), "не совпадают id");
-        assertEquals(epicExpected.getName(), epicActual.getName(), "не совпадает name");
+        assertEquals(epicExpected.getId(), epicActual.getId(), "IDs do not match");
+        assertEquals(epicExpected.getName(), epicActual.getName(), "Names do not match");
         assertEquals(epicExpected.getDescription(), epicActual.getDescription(),
-                "не совпадают description");
-        assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "не совпадают status");
-        assertEquals(epicExpected.getType(), epicActual.getType(), "не совпадают type");
+                "Descriptions do not match");
+        assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "Statuses do not match");
+        assertEquals(epicExpected.getType(), epicActual.getType(), "Types do not match");
 
         List<Integer> subTasksIdExpected = epicExpected.getSubTasksId();
         List<Integer> subTasksIdActual = epicActual.getSubTasksId();
         assertEquals(subTasksIdExpected.size(), subTasksIdActual.size(),
-                "не совпадает количество подзадач в списке эпика");
+                "The number of subtasks in the epic list does not match");
 
     }
 
     @Test
-    @DisplayName("Должен заменить задачу в файле")
+    @DisplayName("Should replace the task in the file")
     void updateTask_replacesTaskInFile() {
         //given
-        Task task = manager.createTask(new Task("название задачи", "описание", Status.DONE,
+        Task task = manager.createTask(new Task("Task's name", "description", Status.DONE,
                 LocalDateTime.of(2024, 6, 18, 13, 17), Duration.ofMinutes(60)));
-        Task taskExpected = new Task("название задачи-2", "описание-2", Status.DONE,
+        Task taskExpected = new Task("Task's name-2", "description-2", Status.DONE,
                 LocalDateTime.of(2024, 6, 18, 19, 17), Duration.ofMinutes(60));
         taskExpected.setId(1);
 
@@ -230,22 +230,22 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
         Task taskActual = managerActual.getTaskById(1);
 
         //then
-        assertEquals(taskExpected.getId(), taskActual.getId(), "не совпадают id");
-        assertEquals(taskExpected.getName(), taskActual.getName(), "не совпадает name");
-        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "не совпадают description");
-        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "не совпадают status");
-        assertEquals(taskExpected.getType(), taskActual.getType(), "не совпадают type");
+        assertEquals(taskExpected.getId(), taskActual.getId(), "IDs do not match");
+        assertEquals(taskExpected.getName(), taskActual.getName(), "Names do not match");
+        assertEquals(taskExpected.getDescription(), taskActual.getDescription(), "Descriptions do not match");
+        assertEquals(taskExpected.getStatus(), taskActual.getStatus(), "Statuses do not match");
+        assertEquals(taskExpected.getType(), taskActual.getType(), "Types do not match");
 
     }
 
     @Test
-    @DisplayName("Должен заменить подзадачу в файле")
+    @DisplayName("Should replace the subtask in the file")
     void updateSubTask_replacesSubTaskInFile() {
         //given
         Epic epic = manager.createEpic(new Epic("name", "description"));
-        SubTask subtask = manager.createSubTask(new SubTask("Название подзадачи", Status.IN_PROGRESS, "описание",
+        SubTask subtask = manager.createSubTask(new SubTask("Subtask's name", Status.IN_PROGRESS, "description",
                 epic.getId(), LocalDateTime.of(2024, 6, 19, 14, 17), Duration.ofMinutes(60)));
-        SubTask subTaskExpected = new SubTask("Название подзадачи2", Status.IN_PROGRESS, "описание2",
+        SubTask subTaskExpected = new SubTask("Subtask's name2", Status.IN_PROGRESS, "description2",
                 epic.getId(), LocalDateTime.of(2024, 6, 19, 14, 17), Duration.ofMinutes(60));
         subTaskExpected.setId(2);
 
@@ -256,17 +256,17 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
         SubTask subTaskActual = managerActual.getSubTaskById(2);
 
         //then
-        assertEquals(subTaskExpected.getId(), subTaskActual.getId(), "не совпадают id");
-        assertEquals(subTaskExpected.getName(), subTaskActual.getName(), "не совпадает name");
+        assertEquals(subTaskExpected.getId(), subTaskActual.getId(), "IDs do not match");
+        assertEquals(subTaskExpected.getName(), subTaskActual.getName(), "Names do not match");
         assertEquals(subTaskExpected.getDescription(), subTaskActual.getDescription(),
-                "не совпадают description");
-        assertEquals(subTaskExpected.getStatus(), subTaskActual.getStatus(), "не совпадают status");
-        assertEquals(subTaskExpected.getEpicId(), subTaskActual.getEpicId(), "не совпадают epicId");
-        assertEquals(subTaskExpected.getType(), subTaskActual.getType(), "не совпадают type");
+                "Descriptions do not match");
+        assertEquals(subTaskExpected.getStatus(), subTaskActual.getStatus(), "Statuses do not match");
+        assertEquals(subTaskExpected.getEpicId(), subTaskActual.getEpicId(), "Epic' IDs do not match");
+        assertEquals(subTaskExpected.getType(), subTaskActual.getType(), "Types do not match");
     }
 
     @Test
-    @DisplayName("Должен заменить эпик в файле")
+    @DisplayName("Should replace the epic in the file")
     void updateEpic_replacesEpicInFile() {
         //given
         Epic epic = manager.createEpic(new Epic("name1", "description1"));
@@ -281,25 +281,25 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
         Epic epicActual = managerActual.getEpicById(1);
 
         //then
-        assertEquals(epicExpected.getId(), epicActual.getId(), "не совпадают id");
-        assertEquals(epicExpected.getName(), epicActual.getName(), "не совпадает name");
+        assertEquals(epicExpected.getId(), epicActual.getId(), "IDs do not match");
+        assertEquals(epicExpected.getName(), epicActual.getName(), "Names do not match");
         assertEquals(epicExpected.getDescription(), epicActual.getDescription(),
-                "не совпадают description");
-        assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "не совпадают status");
-        assertEquals(epicExpected.getType(), epicActual.getType(), "не совпадают type");
+                "Descriptions do not match");
+        assertEquals(epicExpected.getStatus(), epicActual.getStatus(), "Statuses do not match");
+        assertEquals(epicExpected.getType(), epicActual.getType(), "Types do not match");
 
         List<Integer> subTasksIdExpected = epicExpected.getSubTasksId();
         List<Integer> subTasksIdActual = epicActual.getSubTasksId();
         assertEquals(subTasksIdExpected.size(), subTasksIdActual.size(),
-                "не совпадает количество подзадач в списке эпика");
+                "The number of subtasks in the epic list does not match");
 
     }
 
     @Test
-    @DisplayName("Должен удалить задачу из файла")
+    @DisplayName("Should delete the task from the file")
     void deleteTaskById_deleteTaskFromFile() {
         //given
-        Task task = manager.createTask(new Task("название задачи", "описание", Status.DONE,
+        Task task = manager.createTask(new Task("Task's name", "description", Status.DONE,
                 LocalDateTime.of(2024, 6, 18, 13, 17), Duration.ofMinutes(60)));
 
         //when
@@ -308,15 +308,15 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
         FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
 
         //then
-        assertThrows(NotFoundException.class, () -> managerActual.getTaskById(task.getId()), "задача не удалилась");
+        assertThrows(NotFoundException.class, () -> managerActual.getTaskById(task.getId()), "Task was not deleted");
     }
 
     @Test
-    @DisplayName("Должен удалить подзадачу из файла")
+    @DisplayName("Should delete the subtask from the file")
     void deleteSubTaskById_deleteSubTaskFromFile() {
         //given
         Epic epic = manager.createEpic(new Epic("name", "description"));
-        SubTask subtask = manager.createSubTask(new SubTask("Название подзадачи", Status.IN_PROGRESS, "описание",
+        SubTask subtask = manager.createSubTask(new SubTask("Subtask's name", Status.IN_PROGRESS, "description",
                 epic.getId(), LocalDateTime.of(2024, 6, 19, 14, 17), Duration.ofMinutes(60)));
 
 
@@ -326,11 +326,11 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
         FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
 
         //then
-        assertThrows(NotFoundException.class, () -> managerActual.getSubTaskById(subtask.getId()), "задача не удалилась");
+        assertThrows(NotFoundException.class, () -> managerActual.getSubTaskById(subtask.getId()), "Task was not deleted");
     }
 
     @Test
-    @DisplayName("Должен удалить эпик из файла")
+    @DisplayName("Should delete the epic from the file")
     void deleteEpicById_deleteEpicFromFile() {
         //given
         Epic epic = manager.createEpic(new Epic("name", "description"));
@@ -341,17 +341,17 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
         FileBackedTaskManager managerActual = FileBackedTaskManager.loadFromFile(fileForRecovery);
 
         //then
-        assertThrows(NotFoundException.class, () -> managerActual.getEpicById(epic.getId()), "эпик не удалился");
+        assertThrows(NotFoundException.class, () -> managerActual.getEpicById(epic.getId()), "Epic was not deleted");
     }
 
     @Test
-    @DisplayName("Должен удалить все задачи из файла")
+    @DisplayName("Should delete all tasks from the file")
     void deleteAllTasks_deleteAllTasksFromFile() {
         //given
-        Task task1 = manager.createTask(new Task("название задачи", "описание", Status.DONE,
+        Task task1 = manager.createTask(new Task("Task's name", "description", Status.DONE,
                 LocalDateTime.of(2024, 6, 18, 13, 17), Duration.ofMinutes(60)));
 
-        Task task2 = manager.createTask(new Task("название задачи", "описание", Status.DONE,
+        Task task2 = manager.createTask(new Task("Task's name", "description", Status.DONE,
                 LocalDateTime.of(2024, 6, 18, 16, 17), Duration.ofMinutes(60)));
 
 
@@ -362,17 +362,17 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
         List<Task> taskList = managerActual.getTasksList();
 
         //then
-        assertEquals(0, taskList.size(), "Задачи не удалились");
+        assertEquals(0, taskList.size(), "Tasks were not deleted");
     }
 
     @Test
-    @DisplayName("Должен удалить все подзадачи из файла")
+    @DisplayName("Should delete all subtasks from the file")
     void deleteAllSubTasks_deleteAllSubTasksFromFile() {
         //given
         Epic epic = manager.createEpic(new Epic("name", "description"));
-        SubTask subtask1 = manager.createSubTask(new SubTask("Название подзадачи", Status.IN_PROGRESS, "описание",
+        SubTask subtask1 = manager.createSubTask(new SubTask("Subtask's name", Status.IN_PROGRESS, "description",
                 epic.getId(), LocalDateTime.of(2024, 6, 19, 14, 17), Duration.ofMinutes(60)));
-        SubTask subtask2 = manager.createSubTask(new SubTask("Название подзадачи", Status.IN_PROGRESS, "описание",
+        SubTask subtask2 = manager.createSubTask(new SubTask("Subtask's name", Status.IN_PROGRESS, "description",
                 epic.getId(), LocalDateTime.of(2024, 6, 19, 16, 17), Duration.ofMinutes(60)));
 
 
@@ -383,11 +383,11 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
         List<SubTask> subTaskList = managerActual.getSubTasksList();
 
         //then
-        assertEquals(0, subTaskList.size(), "подзадачи не удалились");
+        assertEquals(0, subTaskList.size(), "Subtasks were not deleted");
     }
 
     @Test
-    @DisplayName("Должен удалить все эпики из файла")
+    @DisplayName("Should delete all epics from the file")
     void deleteAllEpics_deleteAllEpicsFromFile() {
         //given
         Epic epic1 = manager.createEpic(new Epic("name1", "description1"));
@@ -400,6 +400,6 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
         List<Epic> epicList = managerActual.getEpicList();
 
         //then
-        assertEquals(0, epicList.size(), "эпики не удалились");
+        assertEquals(0, epicList.size(), "Epics were not deleted");
     }
 }

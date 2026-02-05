@@ -45,7 +45,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 counterId = 0;
             }
         } catch (IOException exp) {
-            throw new ManagerIOException("Ошибка записи в файл: " + file.getName(), exp);
+            throw new ManagerIOException("File write error: " + file.getName(), exp);
         }
     }
 
@@ -99,7 +99,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 manager.calculateEpicData(manager.epics.get(subTask.getEpicId()));
             }
         } catch (IOException exp) {
-            throw new ManagerIOException("Ошибка чтения файла: " + file.getName(), exp);
+            throw new ManagerIOException("File read error: " + file.getName(), exp);
         }
         manager.counterId = maxId;
         return manager;

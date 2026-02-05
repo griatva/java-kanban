@@ -47,13 +47,13 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                         break;
                     }
                     case UNKNOWN:
-                        String message = "Несуществующий запрос";
+                        String message = "Non-existent request";
                         writeResponse(exchange, gson.toJson(message), 400);
                         break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                String message = "Непредвиденная ошибка";
+                String message = "Unexpected error";
                 writeResponse(exchange, gson.toJson(message), 500);
             }
 
@@ -92,7 +92,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                writeResponse(exchange, "Ошибка чтения тела запроса", 500);
+                writeResponse(exchange, "Error reading request body", 500);
             }
         }
     }
@@ -103,14 +103,14 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                 Task task = gson.fromJson(requestBody, Task.class);
                 try {
                     manager.updateTask(task);
-                    String message = "Задача успешно обновлена";
+                    String message = "Task successfully updated";
                     writeResponse(exchange, gson.toJson(message), 201);
                 } catch (ValidationException e) {
                     writeResponse(exchange, gson.toJson(e.getMessage()), 406);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                writeResponse(exchange, "Ошибка чтения тела запроса", 500);
+                writeResponse(exchange, "Error reading request body", 500);
             }
         }
     }
