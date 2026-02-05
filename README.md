@@ -1,7 +1,8 @@
-# Java Kanban — Lightweight Task Manager (Educational)
+# Java Kanban - Lightweight Task Manager (Educational)
 
-A compact **Kanban-style task manager** built in Java as a learning project. It supports three entities — **Task**, *
-*Epic**, **SubTask** — keeps a **view history**, validates **time overlaps**, orders items by **priority (start time)**,
+A compact **Kanban-style task manager** built in Java as a learning project.
+It supports three entities - **Task**, **Epic**, **SubTask** - keeps a **view history**,
+validates **time overlaps**, orders items by **priority (start time)**,
 and exposes a minimal **JSON HTTP API**. Storage is pluggable: **in-memory** or simple **CSV** file.
 
 > Built to practice clean OOP, collections, time APIs, JSON serialization, and HTTP server basics.
